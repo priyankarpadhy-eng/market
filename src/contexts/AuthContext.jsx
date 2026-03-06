@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
                 uid: user.uid,
                 displayName: name,
                 email: user.email || '',
-                photoURL: user.photoURL || extraData.photoURL || '/images/avatar.png',
+                photoURL: user.photoURL || extraData.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
                 major: extraData.major || '',
                 classYear: extraData.classYear || '',
                 location: '',
@@ -68,7 +68,7 @@ export function AuthProvider({ children }) {
         }
 
         const result = await createUserWithEmailAndPassword(auth, email, password);
-        const photoURL = extraData.photoURL || '/images/avatar.png';
+        const photoURL = extraData.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace';
         await updateProfile(result.user, { displayName, photoURL });
         await createUserProfile(result.user, { displayName, photoURL, ...extraData });
 
@@ -118,7 +118,7 @@ export function AuthProvider({ children }) {
         }
 
         const result = await signInAnonymously(auth);
-        await updateProfile(result.user, { displayName: name, photoURL: avatar || '/images/avatar.png' });
+        await updateProfile(result.user, { displayName: name, photoURL: avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace' });
         await createUserProfile(result.user, { displayName: name, classYear: 'Guest Explorer', photoURL: avatar });
         return result;
     }
@@ -165,7 +165,7 @@ export function AuthProvider({ children }) {
                     uid: user.uid,
                     displayName: profile?.displayName || user.displayName || 'User',
                     email: user.email,
-                    photoURL: profile?.photoURL || user.photoURL || '/images/avatar.png',
+                    photoURL: profile?.photoURL || user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
                     emailVerified: user.emailVerified,
                     isAnonymous: user.isAnonymous
                 });

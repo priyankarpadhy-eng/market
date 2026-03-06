@@ -4,7 +4,7 @@ const userProfile = {
     bio: '',
     location: '',
     classYear: '',
-    avatar: '/images/avatar.png',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
     postsCount: 0,
     commentsCount: 0,
     userPosts: [],

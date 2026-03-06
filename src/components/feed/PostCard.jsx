@@ -221,7 +221,7 @@ export default function PostCard({ post, index = 0 }) {
             )}
             <div className="post-header">
                 <img
-                    src={post.authorAvatar || '/images/avatar.png'}
+                    src={post.authorAvatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'}
                     alt={post.authorName}
                     className="post-author-avatar"
                 />

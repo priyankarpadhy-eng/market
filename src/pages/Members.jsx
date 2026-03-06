@@ -35,7 +35,7 @@ export default function Members() {
                     {users.map(user => (
                         <div key={user.id} className="member-card animate-fadeIn">
                             <div className="member-avatar-wrapper">
-                                <img src={user.photoURL || '/images/avatar.png'} alt={user.displayName} className="member-avatar" />
+                                <img src={user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'} alt={user.displayName} className="member-avatar" />
                             </div>
                             <div className="member-info">
                                 <h3 className="member-name">{user.displayName || 'Anonymous'}</h3>

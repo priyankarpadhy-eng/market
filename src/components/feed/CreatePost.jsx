@@ -60,7 +60,7 @@ export default function CreatePost({ onPostSuccess, isModal = false }) {
                 video: mediaType === 'video' ? mediaUrl : null,
                 authorId: currentUser?.uid || 'guest',
                 authorName: currentUser?.displayName || 'Anonymous',
-                authorAvatar: currentUser?.photoURL || '/images/avatar.png',
+                authorAvatar: currentUser?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
                 budget: selectedTag === 'freelancing' ? budget : null,
                 contact: selectedTag === 'freelancing' ? contact : null,
                 communityId: 'all', // Global feed
@@ -115,7 +115,7 @@ export default function CreatePost({ onPostSuccess, isModal = false }) {
         <div className={`create-post-card ${isModal ? 'modal-mode' : ''}`}>
             <div className="create-post-header">
                 <img
-                    src={currentUser?.photoURL || '/images/avatar.png'}
+                    src={currentUser?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'}
                     alt="User"
                     className="create-post-avatar"
                 />

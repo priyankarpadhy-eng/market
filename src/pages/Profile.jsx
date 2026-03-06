@@ -14,7 +14,7 @@ export default function Profile() {
         bio: '',
         location: '',
         classYear: '',
-        avatar: '/images/avatar.png',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
         postsCount: 0,
         commentsCount: 0
     });
@@ -63,15 +63,25 @@ export default function Profile() {
             try {
                 const uid = currentUser.uid;
                 const firestoreProfile = await getUserProfile(uid);
-                if (firestoreProfile) {
-                    setProfile(firestoreProfile);
-                    setEditForm({
-                        displayName: firestoreProfile.displayName || '',
-                        major: firestoreProfile.major || '',
-                        bio: firestoreProfile.bio || '',
-                        location: firestoreProfile.location || '',
-                    });
-                }
+
+                const safeProfile = {
+                    displayName: firestoreProfile?.displayName || currentUser?.displayName || 'IGIT Student',
+                    major: firestoreProfile?.major || '',
+                    bio: firestoreProfile?.bio || '',
+                    location: firestoreProfile?.location || '',
+                    classYear: firestoreProfile?.classYear || '',
+                    avatar: firestoreProfile?.avatar || firestoreProfile?.photoURL || currentUser?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
+                    postsCount: firestoreProfile?.postsCount || 0,
+                    commentsCount: firestoreProfile?.commentsCount || 0
+                };
+
+                setProfile(safeProfile);
+                setEditForm({
+                    displayName: safeProfile.displayName,
+                    major: safeProfile.major,
+                    bio: safeProfile.bio,
+                    location: safeProfile.location,
+                });
 
             } catch (err) {
                 console.log('Profile load error:', err.message);
@@ -138,7 +148,7 @@ export default function Profile() {
             )}
             <div className="profile-card animate-fadeIn">
                 <div className="profile-avatar-wrapper">
-                    <img src={profile.avatar || profile.photoURL || '/images/avatar.png'} alt={profile.displayName} className="profile-avatar" style={{ opacity: uploadingAvatar ? 0.5 : 1 }} />
+                    <img src={profile.avatar || profile.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'} alt={profile.displayName} className="profile-avatar" style={{ opacity: uploadingAvatar ? 0.5 : 1 }} />
                     <label className="profile-avatar-edit" title="Change photo" style={{ cursor: 'pointer' }}>
                         <FiCamera />
                         <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarUpload} disabled={uploadingAvatar} />

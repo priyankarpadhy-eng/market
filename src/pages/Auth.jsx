@@ -14,7 +14,7 @@ export default function Auth() {
     const [password, setPassword] = useState('');
     const [signupData, setSignupData] = useState({ name: '', major: '', classYear: '' });
     const [guestName, setGuestName] = useState('');
-    const [selectedAvatar, setSelectedAvatar] = useState('/images/avatar.png');
+    const [selectedAvatar, setSelectedAvatar] = useState('https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace');
     const [error, setError] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     const [loading, setLoading] = useState(false);

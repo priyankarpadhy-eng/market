@@ -80,7 +80,7 @@ export default function Landing() {
                 type: 'text',
                 authorId: 'anonymous_web',
                 authorName: 'Anonymous',
-                authorAvatar: '/images/avatar.png',
+                authorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
                 communityId: 'all',
                 communityName: 'Global',
                 timeAgo: 'Just now'

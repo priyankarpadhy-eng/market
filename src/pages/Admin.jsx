@@ -388,7 +388,7 @@ export default function Admin() {
                                 {roleSearchResult && (
                                     <div className="founder-user-result">
                                         <img
-                                            src={roleSearchResult.photoURL || '/images/avatar.png'}
+                                            src={roleSearchResult.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'}
                                             alt={roleSearchResult.displayName}
                                             className="founder-result-avatar"
                                         />
