@@ -84,7 +84,7 @@ export default function EmailVerificationModal() {
                 </div>
                 <h2 style={{ fontSize: '1.25rem', marginBottom: '10px' }}>Verify Your Email</h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '20px' }}>
-                    We sent a verification link to <strong>{currentUser.email}</strong>.
+                    We sent a verification link to <strong>{authUser?.email}</strong>.
                     Please check your inbox to continue using Marketplace.
                     <br /><br />
                     <em>This page will automatically refresh once verified.</em>

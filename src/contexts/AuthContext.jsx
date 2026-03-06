@@ -71,7 +71,17 @@ export function AuthProvider({ children }) {
         const photoURL = extraData.photoURL || '/images/avatar.png';
         await updateProfile(result.user, { displayName, photoURL });
         await createUserProfile(result.user, { displayName, photoURL, ...extraData });
-        await sendEmailVerification(result.user);
+
+        // Trigger verification email with better error capture
+        try {
+            console.log('Attempting to send verification email to:', result.user.email);
+            await sendEmailVerification(result.user);
+            console.log('Verification email sent successfully.');
+        } catch (emailErr) {
+            console.error('Email verification error:', emailErr.code, emailErr.message);
+            // We don't throw here so the user is still created/logged in
+        }
+
         return result;
     }
 
