@@ -93,6 +93,10 @@ export default function Sidebar() {
                         }}>Create Free Account 🚀</Link>
                     </div>
                 ) : null}
+                <div style={{ padding: '0 12px', display: 'flex', gap: '15px', marginBottom: '10px' }}>
+                    <Link to="/privacy" style={{ fontSize: '0.75rem', color: '#94a3b8', textDecoration: 'none' }}>Privacy Policy</Link>
+                    <Link to="/terms" style={{ fontSize: '0.75rem', color: '#94a3b8', textDecoration: 'none' }}>Terms of Use</Link>
+                </div>
                 <button
                     onClick={handleLogout}
                     className="sidebar-link logout-btn"

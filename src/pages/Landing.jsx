@@ -231,8 +231,8 @@ export default function Landing() {
                     </div>
                     <div>
                         <h4>Legal</h4>
-                        <Link to="/support">Privacy</Link>
-                        <Link to="/support">Terms</Link>
+                        <Link to="/privacy">Privacy</Link>
+                        <Link to="/terms">Terms</Link>
                         <Link to="/support">Contact</Link>
                     </div>
                 </div>
