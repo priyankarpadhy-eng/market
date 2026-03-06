@@ -23,6 +23,10 @@ if (R2_ACCOUNT_ID && ACCESS_KEY_ID && SECRET_ACCESS_KEY) {
             },
             // Enforce path-style to prevent cross-origin signature failures
             forcePathStyle: true,
+            // Strictly disable checksums so the SDK doesn't inject 'amz-sdk-checksum' headers
+            // that aren't defined in the bucket's allowed CORS exposed headers table
+            requestChecksumCalculation: "WHEN_NOT_REQUIRED",
+            responseChecksumValidation: "WHEN_NOT_REQUIRED",
         });
     } catch (e) {
         console.error('Failed to initialize R2 Client:', e);
