@@ -119,7 +119,12 @@ export default function Navbar() {
 
                 <Link to="/profile" className="navbar-avatar" id="user-avatar" style={{ padding: 0 }}>
                     {currentUser?.photoURL ? (
-                        <img src={currentUser.photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img
+                            src={currentUser.photoURL}
+                            alt="Profile"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser.displayName || 'User'}`; }}
+                        />
                     ) : (
                         getInitials(currentUser?.displayName)
                     )}
