@@ -13,14 +13,13 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
+import { isNicknameAvailable } from '../firebase/services';
 
 const AuthContext = createContext();
 
 export function useAuth() {
     return useContext(AuthContext);
 }
-
-// Demo user removed
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
@@ -31,10 +30,20 @@ export function AuthProvider({ children }) {
     async function createUserProfile(user, extraData = {}) {
         const userRef = doc(db, 'users', user.uid);
         const snapshot = await getDoc(userRef);
+
         if (!snapshot.exists()) {
+            let name = user.displayName || extraData.displayName || 'User';
+
+            // For Google sign-in or other flows where name wasn't pre-checked
+            const available = await isNicknameAvailable(name);
+            if (!available) {
+                // Append a few random digits if taken
+                name = `${name}${Math.floor(Math.random() * 9000) + 1000}`;
+            }
+
             await setDoc(userRef, {
                 uid: user.uid,
-                displayName: user.displayName || extraData.displayName || 'User',
+                displayName: name,
                 email: user.email || '',
                 photoURL: user.photoURL || extraData.photoURL || '/images/avatar.png',
                 major: extraData.major || '',
@@ -52,6 +61,12 @@ export function AuthProvider({ children }) {
 
     // Sign up
     async function signup(email, password, displayName, extraData = {}) {
+        // Enforce nickname uniqueness
+        const available = await isNicknameAvailable(displayName);
+        if (!available) {
+            throw new Error('This nickname is already taken. Please choose another one.');
+        }
+
         const result = await createUserWithEmailAndPassword(auth, email, password);
         const photoURL = extraData.photoURL || '/images/avatar.png';
         await updateProfile(result.user, { displayName, photoURL });
@@ -81,8 +96,18 @@ export function AuthProvider({ children }) {
 
     // Guest login
     async function loginAsGuest(displayName, avatar) {
-        const result = await signInAnonymously(auth);
+        // Enforce name for guests or fallback
         const name = displayName || `Guest_${Math.floor(Math.random() * 10000)}`;
+
+        // Check availability if user provides name
+        if (displayName) {
+            const available = await isNicknameAvailable(displayName);
+            if (!available) {
+                throw new Error('This nickname is already taken by another user.');
+            }
+        }
+
+        const result = await signInAnonymously(auth);
         await updateProfile(result.user, { displayName: name, photoURL: avatar || '/images/avatar.png' });
         await createUserProfile(result.user, { displayName: name, classYear: 'Guest Explorer', photoURL: avatar });
         return result;

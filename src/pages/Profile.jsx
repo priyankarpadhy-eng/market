@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FiEdit2, FiCamera, FiCalendar, FiMapPin, FiShield, FiStar, FiZap } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
-import { getUserProfile, updateUserProfile } from '../firebase/services';
+import { getUserProfile, updateUserProfile, isNicknameAvailable } from '../firebase/services';
 import { uploadFile } from '../lib/storage';
 import './Profile.css';
 
@@ -29,6 +29,32 @@ export default function Profile() {
     });
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const [profileError, setProfileError] = useState('');
+    const [nicknameStatus, setNicknameStatus] = useState({ checking: false, available: true, message: '' });
+
+    useEffect(() => {
+        if (!showEditModal || !editForm.displayName || !currentUser) return;
+
+        if (editForm.displayName.length < 3) {
+            setNicknameStatus({ checking: false, available: true, message: '' });
+            return;
+        }
+
+        const timer = setTimeout(async () => {
+            setNicknameStatus(prev => ({ ...prev, checking: true }));
+            try {
+                const isAvailable = await isNicknameAvailable(editForm.displayName, currentUser.uid);
+                setNicknameStatus({
+                    checking: false,
+                    available: isAvailable,
+                    message: isAvailable ? '✓ Available' : '✗ Already taken'
+                });
+            } catch (err) {
+                setNicknameStatus({ checking: false, available: true, message: '' });
+            }
+        }, 600);
+
+        return () => clearTimeout(timer);
+    }, [editForm.displayName, showEditModal, currentUser?.uid]);
 
     // Load profile from Firestore
     useEffect(() => {
@@ -186,9 +212,20 @@ export default function Profile() {
                     <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
                         <h2>Edit Profile</h2>
                         <div className="profile-modal-field">
-                            <label htmlFor="edit-name">Username / Nickname</label>
-                            <input type="text" id="edit-name" value={editForm.displayName} onChange={(e) => setEditForm(prev => ({ ...prev, displayName: e.target.value }))} />
-                            <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px' }}>Please avoid using your real name for privacy unless necessary.</p>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <label htmlFor="edit-name">Username / Nickname</label>
+                                {nicknameStatus.message && (
+                                    <span style={{ fontSize: '0.7rem', color: nicknameStatus.available ? '#10b981' : '#ef4444', fontWeight: 700 }}>{nicknameStatus.message}</span>
+                                )}
+                            </div>
+                            <input
+                                type="text"
+                                id="edit-name"
+                                value={editForm.displayName}
+                                onChange={(e) => setEditForm(prev => ({ ...prev, displayName: e.target.value }))}
+                                style={{ borderColor: !nicknameStatus.available ? '#ef4444' : (nicknameStatus.available && editForm.displayName !== profile.displayName ? '#10b981' : 'var(--border-medium)') }}
+                            />
+                            <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px' }}>Please avoid using your real name for privacy unless absolutely necessary.</p>
                         </div>
                         <div className="profile-modal-field">
                             <label htmlFor="edit-major">Major</label>
@@ -204,7 +241,7 @@ export default function Profile() {
                         </div>
                         <div className="profile-modal-actions">
                             <button className="profile-modal-cancel" onClick={() => setShowEditModal(false)}>Cancel</button>
-                            <button className="profile-modal-save" onClick={handleSaveProfile} id="save-profile-btn">Save Changes</button>
+                            <button className="profile-modal-save" onClick={handleSaveProfile} id="save-profile-btn" disabled={!nicknameStatus.available || nicknameStatus.checking}>Save Changes</button>
                         </div>
                     </div>
                 </div>

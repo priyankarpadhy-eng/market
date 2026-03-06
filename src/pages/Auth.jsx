@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { isNicknameAvailable } from '../firebase/services';
 import './Auth.css';
 
 export default function Auth() {
@@ -18,6 +19,31 @@ export default function Auth() {
     const [successMsg, setSuccessMsg] = useState('');
     const [loading, setLoading] = useState(false);
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [nicknameStatus, setNicknameStatus] = useState({ checking: false, available: true, message: '' });
+
+    useEffect(() => {
+        const nameToCheck = authMode === 'signup' ? signupData.name : guestName;
+        if (nameToCheck.length < 3) {
+            setNicknameStatus({ checking: false, available: true, message: '' });
+            return;
+        }
+
+        const timer = setTimeout(async () => {
+            setNicknameStatus(prev => ({ ...prev, checking: true }));
+            try {
+                const isAvailable = await isNicknameAvailable(nameToCheck);
+                setNicknameStatus({
+                    checking: false,
+                    available: isAvailable,
+                    message: isAvailable ? '✓ Nickname is available' : '✗ This nickname is already taken'
+                });
+            } catch (err) {
+                setNicknameStatus({ checking: false, available: true, message: '' });
+            }
+        }, 600);
+
+        return () => clearTimeout(timer);
+    }, [signupData.name, guestName, authMode]);
 
     const avatars = [
         { id: 'TECH', url: '/avatars/tech.png' },
@@ -138,12 +164,25 @@ export default function Auth() {
                                     <input
                                         type="text"
                                         id="guestName"
-                                        style={{ paddingLeft: '32px' }}
+                                        style={{
+                                            paddingLeft: '32px',
+                                            borderColor: !nicknameStatus.available ? '#ef4444' : (nicknameStatus.message ? '#10b981' : 'var(--border-medium)')
+                                        }}
                                         placeholder="e.g. FriendlyGecko42"
                                         value={guestName}
                                         onChange={(e) => setGuestName(e.target.value)}
                                         required
                                     />
+                                    {nicknameStatus.message && (
+                                        <p style={{
+                                            fontSize: '0.75rem',
+                                            marginTop: '4px',
+                                            color: nicknameStatus.available ? '#10b981' : '#ef4444',
+                                            fontWeight: 600
+                                        }}>
+                                            {nicknameStatus.message}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -164,7 +203,20 @@ export default function Auth() {
                                             value={signupData.name}
                                             onChange={(e) => setSignupData(prev => ({ ...prev, name: e.target.value }))}
                                             required
+                                            style={{
+                                                borderColor: !nicknameStatus.available ? '#ef4444' : (nicknameStatus.message ? '#10b981' : 'var(--border-medium)')
+                                            }}
                                         />
+                                        {nicknameStatus.message && (
+                                            <p style={{
+                                                fontSize: '0.75rem',
+                                                marginTop: '4px',
+                                                color: nicknameStatus.available ? '#10b981' : '#ef4444',
+                                                fontWeight: 600
+                                            }}>
+                                                {nicknameStatus.message}
+                                            </p>
+                                        )}
                                         <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px' }}>Please avoid using your real name unless absolutely necessary.</p>
                                     </div>
                                     <div className="auth-field">
@@ -256,7 +308,7 @@ export default function Auth() {
                         </div>
                     )}
 
-                    <button type="submit" className="auth-submit-btn" id="auth-submit" disabled={loading || ((authMode === 'signup' || authMode === 'guest') && !termsAccepted)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                    <button type="submit" className="auth-submit-btn" id="auth-submit" disabled={loading || ((authMode === 'signup' || authMode === 'guest') && (!termsAccepted || !nicknameStatus.available))} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                         {loading ? 'Please wait...'
                             : authMode === 'login' ? 'Sign In'
                                 : authMode === 'signup' ? 'Create Account'

@@ -399,10 +399,39 @@ export async function updateUserProfile(userId, data) {
         throw new Error('Please wait before updating your profile again (Rate Limit).');
     }
     lastProfileUpdate = now;
+
+    // If nickname is changing, check uniqueness
+    if (data.displayName) {
+        const isAvailable = await isNicknameAvailable(data.displayName, userId);
+        if (!isAvailable) {
+            throw new Error('This nickname is already taken. Please choose another one.');
+        }
+    }
+
     await updateDoc(doc(db, 'users', userId), {
         ...data,
         updatedAt: serverTimestamp(),
     });
+}
+
+/**
+ * Checks if a nickname is available.
+ * @param {string} nickname The nickname to check.
+ * @param {string} excludeUserId Optional user ID to exclude (e.g., current user when updating).
+ */
+export async function isNicknameAvailable(nickname, excludeUserId = null) {
+    if (!nickname || nickname.length < 3) return false;
+    const q = query(collection(db, 'users'), where('displayName', '==', nickname.trim()));
+    const snap = await getDocs(q);
+
+    if (snap.empty) return true;
+
+    // If not empty, check if the only user found is the one being excluded
+    if (excludeUserId) {
+        return snap.docs.every(d => d.id === excludeUserId);
+    }
+
+    return false;
 }
 
 export async function getUserByEmail(email) {
