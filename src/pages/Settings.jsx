@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FiUser, FiBookOpen, FiChevronRight, FiLock, FiShield, FiSun, FiMoon, FiSettings } from 'react-icons/fi';
+import { FiUser, FiBookOpen, FiChevronRight, FiSun, FiMoon, FiSettings } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserSettings, saveUserSettings, getUserProfile } from '../firebase/services';
 import { defaultSettings, userProfile as localProfile } from '../data/extraData';
@@ -43,12 +44,7 @@ export default function Settings() {
         }
     };
 
-    const toggleSetting = (key) => {
-        const updated = { ...settings, [key]: !settings[key] };
-        setSettings(updated);
-        persistSettings(updated);
-        showSavedToast('Settings saved ✓');
-    };
+
 
     const setTheme = (theme) => {
         const updated = { ...settings, theme };
@@ -113,58 +109,26 @@ export default function Settings() {
             </div>
 
             <div className="settings-section">
-                <h2 className="settings-section-title">Notifications</h2>
-                <div className="settings-toggle-row">
-                    <div>
-                        <div className="settings-toggle-label">Push Notifications</div>
-                        <div className="settings-toggle-desc">Receive alerts for mentions and circle updates</div>
+                <h2 className="settings-section-title">Community</h2>
+                <a
+                    href="https://chat.whatsapp.com/L18veuCIe5b1uFiaCCjcLa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="settings-account-item"
+                    style={{ textDecoration: 'none' }}
+                >
+                    <div className="settings-account-icon" style={{ background: '#25D366', color: 'white' }}>
+                        <FaWhatsapp size={20} />
                     </div>
-                    <label className="settings-toggle">
-                        <input type="checkbox" checked={settings.pushNotifications} onChange={() => toggleSetting('pushNotifications')} id="toggle-push" />
-                        <div className="settings-toggle-track" />
-                        <div className="settings-toggle-thumb" />
-                    </label>
-                </div>
-                <div className="settings-toggle-row">
-                    <div>
-                        <div className="settings-toggle-label">Email Digest</div>
-                        <div className="settings-toggle-desc">Weekly summary of IGIT activities</div>
+                    <div className="settings-account-info">
+                        <div className="settings-account-label">WhatsApp Community</div>
+                        <div className="settings-account-value">Join official IGIT Marketplace group</div>
                     </div>
-                    <label className="settings-toggle">
-                        <input type="checkbox" checked={settings.emailDigest} onChange={() => toggleSetting('emailDigest')} id="toggle-email" />
-                        <div className="settings-toggle-track" />
-                        <div className="settings-toggle-thumb" />
-                    </label>
-                </div>
+                    <FiChevronRight className="settings-account-arrow" />
+                </a>
             </div>
 
-            <div className="settings-section">
-                <h2 className="settings-section-title">Privacy & Security</h2>
-                <div className="settings-security-row">
-                    <div className="settings-security-card" id="change-password-btn">
-                        <div className="settings-security-icon lock"><FiLock /></div>
-                        <div>
-                            <div className="settings-security-label">Change Password</div>
-                            <div className="settings-security-desc">Update your account security</div>
-                        </div>
-                    </div>
-                    <div className="settings-security-card" id="two-factor-btn">
-                        <div className="settings-security-icon shield"><FiShield /></div>
-                        <div>
-                            <div className="settings-security-label">Two-Factor Auth</div>
-                            <div className="settings-security-desc">Enable extra protection</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="settings-toggle-row">
-                    <div><div className="settings-toggle-label">Public Profile</div></div>
-                    <label className="settings-toggle">
-                        <input type="checkbox" checked={settings.publicProfile} onChange={() => toggleSetting('publicProfile')} id="toggle-public" />
-                        <div className="settings-toggle-track" />
-                        <div className="settings-toggle-thumb" />
-                    </label>
-                </div>
-            </div>
+
 
             <div className="settings-section">
                 <h2 className="settings-section-title">Display</h2>
@@ -181,11 +145,7 @@ export default function Settings() {
                 </select>
             </div>
 
-            <div className="settings-danger">
-                <div className="settings-danger-title">Danger Zone</div>
-                <p className="settings-danger-text">Deleting your account is permanent and cannot be undone. All your circles, events, and message history will be lost.</p>
-                <button className="settings-danger-btn" id="delete-account-btn">Delete Account</button>
-            </div>
+
 
             <div className="settings-footer">
                 <div className="settings-footer-version">Marketplace Version 2.4.0 (Build 892)</div>

@@ -160,12 +160,30 @@
 }
 
 @media (max-width: 768px) {
+    .navbar {
+        height: 64px;
+        padding: 0 16px;
+    }
+
+    .navbar-logo-img {
+        height: 48px;
+    }
+
     .navbar-search {
         display: none;
     }
 
     .navbar-nav {
         display: none;
+    }
+
+    .navbar-actions {
+        gap: 4px;
+    }
+
+    .navbar-action-btn:not(#messages-btn) {
+        display: none;
+        /* Keep messages and profile avatar */
     }
 }
 

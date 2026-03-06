@@ -134,6 +134,25 @@ ol {
   padding: 0 24px;
 }
 
+@media (max-width: 640px) {
+  .container {
+    padding: 0 12px;
+  }
+}
+
+/* Base Responsive Layout Tweaks */
+@media (max-width: 768px) {
+  body {
+    background-color: var(--bg-white);
+    /* Cleaner look on mobile */
+  }
+
+  .layout-content {
+    padding: 0;
+    /* Let pages handle their own padding/breakout */
+  }
+}
+
 .btn-primary {
   display: inline-flex;
   align-items: center;

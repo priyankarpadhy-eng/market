@@ -94,9 +94,19 @@ export default function Sidebar() {
                         }}>Create Free Account 🚀</Link>
                     </div>
                 ) : null}
-                <div style={{ padding: '0 12px', display: 'flex', gap: '15px', marginBottom: '10px' }}>
-                    <Link to="/privacy" style={{ fontSize: '0.75rem', color: '#94a3b8', textDecoration: 'none' }}>Privacy Policy</Link>
-                    <Link to="/terms" style={{ fontSize: '0.75rem', color: '#94a3b8', textDecoration: 'none' }}>Terms of Use</Link>
+                <div style={{ padding: '0 12px', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '15px' }}>
+                    <a
+                        href="https://chat.whatsapp.com/L18veuCIe5b1uFiaCCjcLa"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: '0.8rem', color: '#16a34a', textDecoration: 'none', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '5px' }}
+                    >
+                        <span style={{ fontSize: '1rem' }}>💬</span> Join WhatsApp Group
+                    </a>
+                    <div style={{ display: 'flex', gap: '15px' }}>
+                        <Link to="/privacy" style={{ fontSize: '0.75rem', color: '#94a3b8', textDecoration: 'none' }}>Privacy Policy</Link>
+                        <Link to="/terms" style={{ fontSize: '0.75rem', color: '#94a3b8', textDecoration: 'none' }}>Terms of Use</Link>
+                    </div>
                 </div>
                 <button
                     onClick={handleLogout}

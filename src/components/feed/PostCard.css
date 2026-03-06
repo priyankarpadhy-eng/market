@@ -945,3 +945,45 @@
         transform: translateY(0);
     }
 }
+
+@media (max-width: 768px) {
+
+    .post-card,
+    .confession-letter-card,
+    .freelance-card,
+    .discussion-card {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        margin-bottom: 8px;
+        box-shadow: none;
+    }
+
+    .post-header {
+        padding: 12px 16px;
+    }
+
+    .post-content-container {
+        padding: 0 16px 10px 16px;
+    }
+
+    .post-title {
+        font-size: 1.15rem;
+    }
+
+    .post-footer {
+        padding: 8px 16px;
+    }
+
+    .confession-left {
+        padding: 12px;
+    }
+
+    .confession-right {
+        padding: 16px;
+    }
+
+    .confession-letter-body {
+        padding: 12px 16px;
+    }
+}

@@ -74,7 +74,42 @@
     transition: transform 0.2s, background 0.2s;
 }
 
-.fab-create-btn:hover {
-    transform: scale(1.05);
-    background: #4338ca;
+@media (max-width: 768px) {
+    .home-page {
+        gap: 0;
+    }
+
+    .home-feed {
+        padding: 0;
+    }
+
+    .feed-filters {
+        margin: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 12px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .feed-filters::-webkit-scrollbar {
+        display: none;
+    }
+
+    .feed-posts {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 640px) {
+    .fab-create-btn {
+        bottom: 80px;
+        /* Stay above bottom nav */
+        right: 16px;
+        width: 54px;
+        height: 54px;
+        font-size: 1.5rem;
+    }
 }

@@ -128,16 +128,31 @@
 /* Mobile responsive padding */
 @media (max-width: 768px) {
     .full-page {
-        top: 16px;
-        left: 16px;
-        right: 16px;
-        bottom: 16px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+        z-index: 1001;
+        /* Above navbar for true full page breakout */
     }
 
     .mini-player {
-        bottom: 16px;
-        right: 16px;
-        width: 300px;
-        height: 150px;
+        bottom: 152px;
+        /* Clears both the mobile navbar and the floating plus button */
+        right: 12px;
+        width: 170px;
+        height: 100px;
+        border-radius: 12px;
+    }
+
+    .mini-brand span {
+        display: none;
+        /* Icon only on mobile label to save space */
+    }
+
+    .full-page-footer {
+        padding: 8px 12px;
+        font-size: 0.65rem;
     }
 }

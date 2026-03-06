@@ -172,18 +172,53 @@
 }
 
 @media (max-width: 768px) {
+    .marketplace-page {
+        padding: 16px;
+    }
+
     .marketplace-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .marketplace-header {
         flex-direction: column;
         gap: 16px;
+        align-items: stretch;
+    }
+
+    .marketplace-list-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .marketplace-categories {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .marketplace-categories::-webkit-scrollbar {
+        display: none;
+    }
+
+    .marketplace-category-btn {
+        white-space: nowrap;
+        padding: 8px 16px;
     }
 }
 
 @media (max-width: 480px) {
     .marketplace-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columns still looks decent on most phones */
+        gap: 8px;
+    }
+
+    .marketplace-search-row {
+        flex-direction: column;
+        align-items: stretch;
     }
 }

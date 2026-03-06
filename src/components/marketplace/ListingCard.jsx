@@ -137,20 +137,32 @@ export default function ListingCard({ listing, index = 0 }) {
                             </div>
                             <span className="listing-card-seller-name">{listing.seller}</span>
                         </div>
-                        {isAdmin ? (
-                            <button className="listing-card-details-btn" style={{ background: '#fee2e2', color: '#ef4444', padding: '6px' }} onClick={async (e) => {
-                                e.stopPropagation();
-                                if (window.confirm("Admin: Permanently delete this listing?")) {
-                                    await deleteListing(listing.id);
-                                }
-                            }}>
-                                <FiTrash2 />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            {isAdmin && (
+                                <button className="listing-card-details-btn" style={{ background: '#fee2e2', color: '#ef4444', padding: '8px', border: 'none', borderRadius: '8px', display: 'flex' }} onClick={async (e) => {
+                                    e.stopPropagation();
+                                    if (window.confirm("Admin: Permanently delete this listing?")) {
+                                        await deleteListing(listing.id);
+                                    }
+                                }}>
+                                    <FiTrash2 size={14} />
+                                </button>
+                            )}
+                            <button
+                                className="listing-card-details-btn"
+                                style={{
+                                    background: 'var(--primary-lighter)',
+                                    color: 'var(--primary)',
+                                    padding: '6px 12px',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    fontWeight: 700,
+                                    fontSize: '0.75rem'
+                                }}
+                            >
+                                View Details
                             </button>
-                        ) : (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '0.9rem' }}>
-                                <FiMessageCircle /> <span style={{ fontSize: '0.75rem' }}>Ask</span>
-                            </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             </motion.div>

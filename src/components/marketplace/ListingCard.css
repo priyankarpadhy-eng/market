@@ -175,3 +175,23 @@
 .listing-card-details-btn:hover {
     color: var(--primary-hover);
 }
+
+/* Modal Responsiveness */
+@media (max-width: 768px) {
+    .profile-modal {
+        flex-direction: column !important;
+        height: 90vh !important;
+        width: 95% !important;
+    }
+
+    .profile-modal>div:first-child {
+        flex: 1 !important;
+        height: auto !important;
+    }
+
+    .profile-modal>div:last-child {
+        flex: 1.5 !important;
+        border-left: none !important;
+        border-top: 1px solid var(--border-light);
+    }
+}

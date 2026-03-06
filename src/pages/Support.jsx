@@ -75,7 +75,7 @@ export default function Support() {
                 {/* Contact Cards */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '48px' }}>
                     <motion.a
-                        href="mailto:priyamnkar@gmail.com"
+                        href="mailto:clawcode66@gmail.com"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
@@ -99,7 +99,7 @@ export default function Support() {
                         <div>
                             <h3 style={{ margin: '0 0 6px', fontSize: '1.1rem', fontWeight: 700, color: '#0f172a' }}>Email Us</h3>
                             <p style={{ margin: '0 0 12px', color: '#64748b', fontSize: '0.88rem' }}>For general inquiries and support</p>
-                            <span style={{ color: '#4f46e5', fontWeight: 700, fontSize: '1rem' }}>priyamnkar@gmail.com</span>
+                            <span style={{ color: '#4f46e5', fontWeight: 700, fontSize: '1rem' }}>clawcode66@gmail.com</span>
                         </div>
                     </motion.a>
 
@@ -209,7 +209,7 @@ export default function Support() {
                     <h3 style={{ margin: '0 0 8px', fontSize: '1.2rem', fontWeight: 700 }}>Still have questions?</h3>
                     <p style={{ margin: '0 0 20px', opacity: 0.85, fontSize: '0.9rem' }}>Don't hesitate to reach out. We're here to help!</p>
                     <a
-                        href="mailto:priyamnkar@gmail.com"
+                        href="mailto:clawcode66@gmail.com"
                         style={{
                             display: 'inline-flex', alignItems: 'center', gap: '8px',
                             padding: '12px 28px', background: 'white', color: '#4f46e5',

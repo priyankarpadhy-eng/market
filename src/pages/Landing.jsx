@@ -237,6 +237,8 @@ export default function Landing() {
                     </div>
                 </div>
 
+                {/* Developer card hidden for now */}
+                {/* 
                 <div style={{
                     margin: '60px auto 30px auto',
                     padding: '24px',
@@ -297,7 +299,6 @@ export default function Landing() {
                     <div style={{ position: 'absolute', top: '-50%', right: '-20%', width: '150px', height: '150px', background: 'radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%)', zIndex: 0 }}></div>
 
                     <div style={{ position: 'relative', zIndex: 1, animation: 'floatProfile 6s ease-in-out infinite' }}>
-                        {/* Orbital rings around the profile picture */}
                         <div style={{ position: 'absolute', inset: '-6px', border: '1px dashed rgba(59, 130, 246, 0.4)', borderRadius: '50%', animation: 'spinSlow 20s linear infinite' }}></div>
                         <div style={{ position: 'absolute', inset: '-12px', border: '1px dotted rgba(139, 92, 246, 0.3)', borderRadius: '50%', animation: 'spinSlow 15s linear infinite reverse' }}></div>
 
@@ -346,6 +347,7 @@ export default function Landing() {
                         </a>
                     </div>
                 </div>
+                */}
 
                 <div className="footer-bottom">
                     <p>© 2026 Marketplace Inc. Constructed with ❤️</p>
