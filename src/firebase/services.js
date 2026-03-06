@@ -683,6 +683,7 @@ export async function createEvent(eventData) {
         eventTime: eventData.eventTime || '',
         category: eventData.category || 'general',
         registrationLink: eventData.registrationLink || '',
+        isPinned: eventData.isPinned || false,
         createdBy: eventData.createdBy,
         createdAt: serverTimestamp(),
     });

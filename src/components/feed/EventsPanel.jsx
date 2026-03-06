@@ -40,9 +40,9 @@ export default function EventsPanel() {
 
     useEffect(() => {
         const unsub = subscribeToEvents((data) => {
-            // Only show upcoming + today's events
-            const upcoming = data.filter(e => isUpcoming(e.eventDate));
-            setEvents(upcoming);
+            // Priority: Only show events explicitly pinned by Admin on the sidebar
+            const pinned = data.filter(e => e.isPinned && isUpcoming(e.eventDate));
+            setEvents(pinned);
         });
         return () => unsub();
     }, []);
@@ -50,11 +50,11 @@ export default function EventsPanel() {
     if (events.length === 0) return null;
 
     return (
-        <section className="events-panel" aria-label="Upcoming Events">
+        <section className="events-panel" aria-label="Featured Events">
             <div className="events-panel-header">
                 <div className="events-panel-title">
-                    <span className="events-panel-icon">🗓️</span>
-                    <h3>Upcoming Events</h3>
+                    <span className="events-panel-icon">📌</span>
+                    <h3>Featured Events</h3>
                 </div>
                 <span className="events-panel-count">{events.length}</span>
             </div>

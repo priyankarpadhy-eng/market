@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FiShield, FiTrash2, FiUsers, FiShoppingBag, FiLayers, FiCalendar, FiPlus, FiX, FiMapPin, FiClock, FiLink, FiImage, FiEdit2, FiSearch, FiUserCheck, FiUserX, FiAward } from 'react-icons/fi';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FiShield, FiTrash2, FiUsers, FiShoppingBag, FiLayers, FiCalendar, FiPlus, FiX, FiMapPin, FiClock, FiLink, FiImage, FiEdit2, FiSearch, FiUserCheck, FiUserX, FiAward, FiStar } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { getAllPostsForAdmin, getAllListingsForAdmin, getAllUsers, deletePost, deleteListing, getReportedPosts, dismissReport, resolveReport, getEvents, createEvent, deleteEvent, updateEvent, searchUserByEmail, setUserRole } from '../firebase/services';
 import { uploadFile } from '../lib/storage';
 import './Admin.css';
 
-const EMPTY_EVENT = { title: '', caption: '', description: '', location: '', eventDate: '', eventTime: '', category: 'general', registrationLink: '' };
+const EMPTY_EVENT = { title: '', caption: '', description: '', location: '', eventDate: '', eventTime: '', category: 'general', registrationLink: '', isPinned: false };
 const CATEGORIES = ['general', 'workshop', 'hackathon', 'cultural', 'sports', 'seminar', 'fest'];
 
 export default function Admin() {
     const { isAdmin, isFounder, currentUser } = useAuth();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('posts');
+    const location = useLocation();
+    const [activeTab, setActiveTab] = useState(location.state?.tab || 'posts');
     const [posts, setPosts] = useState([]);
     const [listings, setListings] = useState([]);
     const [users, setUsers] = useState([]);
@@ -130,6 +131,7 @@ export default function Admin() {
             eventTime: event.eventTime || '',
             category: event.category || 'general',
             registrationLink: event.registrationLink || '',
+            isPinned: event.isPinned || false,
         });
         setBannerFile(null);
         setBannerPreview(event.bannerUrl || '');
@@ -337,6 +339,19 @@ export default function Admin() {
                                                         {event.location && <span><FiMapPin size={12} /> {event.location}</span>}
                                                     </div>
                                                     <div className="admin-event-actions">
+                                                        <button
+                                                            className={`admin-edit-btn ${event.isPinned ? 'pinned' : ''}`}
+                                                            onClick={async (e) => {
+                                                                e.stopPropagation();
+                                                                try {
+                                                                    await updateEvent(event.id, { isPinned: !event.isPinned });
+                                                                    setEvents(events.map(ev => ev.id === event.id ? { ...ev, isPinned: !ev.isPinned } : ev));
+                                                                } catch (err) { alert('Failed to toggle pin.'); }
+                                                            }}
+                                                            style={{ background: event.isPinned ? '#fef3c7' : 'transparent', color: event.isPinned ? '#b45309' : 'var(--text-secondary)' }}
+                                                        >
+                                                            <FiStar fill={event.isPinned ? '#b45309' : 'none'} /> {event.isPinned ? 'Unpin' : 'Pin'}
+                                                        </button>
                                                         <button className="admin-edit-btn" onClick={() => openEditEvent(event)}><FiEdit2 /> Edit</button>
                                                         <button className="admin-delete-btn" onClick={() => handleDeleteEvent(event.id)}><FiTrash2 /> Delete</button>
                                                     </div>
@@ -525,6 +540,20 @@ export default function Admin() {
                             <div className="admin-form-group">
                                 <label><FiLink size={12} /> Registration Link</label>
                                 <input type="url" placeholder="https://forms.google.com/..." value={eventForm.registrationLink} onChange={e => setEventForm(f => ({ ...f, registrationLink: e.target.value }))} />
+                            </div>
+
+                            <div className="admin-form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                                <input
+                                    type="checkbox"
+                                    id="isPinned"
+                                    checked={eventForm.isPinned}
+                                    onChange={e => setEventForm(f => ({ ...f, isPinned: e.target.checked }))}
+                                    style={{ width: 'auto' }}
+                                />
+                                <label htmlFor="isPinned" style={{ marginBottom: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <FiStar size={14} color={eventForm.isPinned ? '#f59e0b' : '#94a3b8'} />
+                                    Pin this event to the top of the sidebar (Featured)
+                                </label>
                             </div>
 
                             {eventError && (

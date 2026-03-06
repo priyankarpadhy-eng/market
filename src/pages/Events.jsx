@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { subscribeToEvents } from '../firebase/services';
 import { FiCalendar, FiMapPin, FiClock, FiExternalLink, FiTag, FiSearch, FiPlus } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,6 +17,7 @@ const CATEGORY_COLORS = {
 };
 
 export default function Events() {
+    const navigate = useNavigate();
     const { isAdmin, isFounder } = useAuth();
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -37,6 +39,10 @@ export default function Events() {
             e.caption?.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCat = activeCategory === 'All' || e.category?.toLowerCase() === activeCategory.toLowerCase();
         return matchesSearch && matchesCat;
+    }).sort((a, b) => {
+        if (a.isPinned && !b.isPinned) return -1;
+        if (!a.isPinned && b.isPinned) return 1;
+        return 0;
     });
 
     return (
@@ -47,7 +53,7 @@ export default function Events() {
                     <p className="events-subtitle">Join workshops, fests, and campus activities at IGIT Sarang.</p>
                 </div>
                 {(isAdmin || isFounder) && (
-                    <button className="create-event-btn">
+                    <button className="create-event-btn" onClick={() => navigate('/admin')}>
                         <FiPlus /> Post Event
                     </button>
                 )}
@@ -100,11 +106,18 @@ export default function Events() {
                                     </div>
                                 )}
                                 <div className="event-full-content">
-                                    <div className="event-full-cat" style={{
-                                        background: (CATEGORY_COLORS[event.category?.toLowerCase()] || CATEGORY_COLORS.general).bg,
-                                        color: (CATEGORY_COLORS[event.category?.toLowerCase()] || CATEGORY_COLORS.general).text
-                                    }}>
-                                        <FiTag size={12} /> {event.category || 'General'}
+                                    <div className="event-full-cat-row" style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                                        <div className="event-full-cat" style={{
+                                            background: (CATEGORY_COLORS[event.category?.toLowerCase()] || CATEGORY_COLORS.general).bg,
+                                            color: (CATEGORY_COLORS[event.category?.toLowerCase()] || CATEGORY_COLORS.general).text
+                                        }}>
+                                            <FiTag size={12} /> {event.category || 'General'}
+                                        </div>
+                                        {event.isPinned && (
+                                            <div className="event-full-cat pinned" style={{ background: '#fef3c7', color: '#b45309' }}>
+                                                <FiStar size={12} fill="#b45309" /> Featured
+                                            </div>
+                                        )}
                                     </div>
                                     <h3 className="event-full-title">{event.title}</h3>
                                     <p className="event-full-caption">{event.caption}</p>
