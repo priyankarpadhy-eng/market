@@ -13,7 +13,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
-import { isNicknameAvailable } from '../firebase/services';
+import { isNicknameAvailable, getUserByNickname } from '../firebase/services';
 
 const AuthContext = createContext();
 
@@ -86,8 +86,19 @@ export function AuthProvider({ children }) {
     }
 
     // Login
-    async function login(email, password) {
-        const result = await signInWithEmailAndPassword(auth, email, password);
+    async function login(emailOrNickname, password) {
+        let targetEmail = emailOrNickname;
+
+        // Check if it's an email or a nickname
+        if (!emailOrNickname.includes('@')) {
+            const userDoc = await getUserByNickname(emailOrNickname);
+            if (!userDoc || !userDoc.email) {
+                throw new Error('User not found with this nickname.');
+            }
+            targetEmail = userDoc.email;
+        }
+
+        const result = await signInWithEmailAndPassword(auth, targetEmail, password);
         return result;
     }
 

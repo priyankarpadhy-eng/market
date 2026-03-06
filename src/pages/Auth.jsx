@@ -257,11 +257,11 @@ export default function Auth() {
                                 </>
                             )}
                             <div className="auth-field">
-                                <label htmlFor="email">Email</label>
+                                <label htmlFor="email">{authMode === 'login' ? 'Email or Nickname' : 'Email'}</label>
                                 <input
-                                    type="email"
+                                    type={authMode === 'login' ? 'text' : 'email'}
                                     id="email"
-                                    placeholder="Enter your email"
+                                    placeholder={authMode === 'login' ? 'Enter your email or nickname' : 'Enter your email'}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required

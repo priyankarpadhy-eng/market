@@ -441,6 +441,14 @@ export async function getUserByEmail(email) {
     return { uid: snap.docs[0].id, ...snap.docs[0].data() };
 }
 
+export async function getUserByNickname(nickname) {
+    if (!nickname) return null;
+    const q = query(collection(db, 'users'), where('displayName', '==', nickname.trim()), limit(1));
+    const snap = await getDocs(q);
+    if (snap.empty) return null;
+    return { uid: snap.docs[0].id, ...snap.docs[0].data() };
+}
+
 export async function getUserPosts(userId) {
     const q = query(postsRef, where('authorId', '==', userId), orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
