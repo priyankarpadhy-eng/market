@@ -245,6 +245,14 @@ export function subscribeToListings(category, searchQuery, callback) {
 
     return onSnapshot(q, (snapshot) => {
         let results = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Safety client-side filter: Ensure results strictly match category if not 'All'
+        if (category && category !== 'All') {
+            results = results.filter(item =>
+                String(item.category || '').toLowerCase() === category.toLowerCase()
+            );
+        }
+
         if (searchQuery) {
             const lowerQ = searchQuery.toLowerCase();
             results = results.filter(item =>
