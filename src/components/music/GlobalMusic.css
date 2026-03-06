@@ -1,0 +1,143 @@
+.global-music-container {
+    background: #000;
+    overflow: hidden;
+    position: absolute;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 99;
+    /* Higher than page content but below system modals */
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.global-music-iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: transparent;
+}
+
+/* Full Page Mode (Active when on /music) */
+.full-page {
+    /* Position over the main Layout boundaries exactly where the normal Music page is */
+    top: 24px;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    border-radius: 20px;
+}
+
+.full-page-footer {
+    background: #000;
+    padding: 12px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+}
+
+.full-page-footer p {
+    font-size: 0.75rem;
+    color: #555;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Mini Player Mode (Active on all other pages once initialized) */
+.mini-player {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 320px;
+    height: 180px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    z-index: 9999;
+    /* Top level floating element */
+}
+
+.mini-player:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+}
+
+.mini-player-header {
+    background: transparent;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mini-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.mini-brand:hover {
+    opacity: 0.8;
+}
+
+.mini-dot {
+    width: 5px;
+    height: 5px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+.mini-icon {
+    font-size: 0.85rem;
+}
+
+.mini-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.mini-btn {
+    color: #888;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+    padding: 0;
+}
+
+.mini-btn:hover {
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.mini-btn.close-btn:hover {
+    color: #ef4444;
+}
+
+/* Mobile responsive padding */
+@media (max-width: 768px) {
+    .full-page {
+        top: 16px;
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+    }
+
+    .mini-player {
+        bottom: 16px;
+        right: 16px;
+        width: 300px;
+        height: 150px;
+    }
+}

@@ -1,19 +1,11 @@
 import './Music.css';
 
 export default function Music() {
-    const playerUrl = window.location.hostname === 'localhost' ? 'http://localhost:5174' : 'https://monochrome.tf';
+    // The actual music player iframe is now globally managed in Layout.jsx -> GlobalMusicPlayer.jsx
+    // This allows music to keep playing seamlessly when navigating to other app pages.
+    // This component simply acts as an anchor/spacer to push the layout wrapper boundaries.
 
     return (
-        <div className="music-page">
-            <iframe
-                src={playerUrl}
-                className="music-page-iframe"
-                title="Monochrome Player"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            />
-            <div className="music-page-footer">
-                <p>Note: We do not host the music player or store any music on our servers. This is an integrated third-party experience.</p>
-            </div>
-        </div>
+        <div style={{ width: '100%', minHeight: 'calc(100vh - 120px)' }}></div>
     );
 }
