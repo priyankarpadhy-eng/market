@@ -26,8 +26,10 @@ export default async function handler(req, res) {
             Bucket: process.env.VITE_R2_BUCKET,
             Key: fileName,
             ContentType: contentType,
+            // (Optional metadata note: SDK signature doesn't natively block pre-signed PUT by size in R2 without ContentLength explicitly checked by the client, but adding it explicitly adds a strict policy requirement for the generated URL)
         });
 
+        // Generate the pre-signed URL including the content type so signatures match exactly.
         const url = await getSignedUrl(r2Client, command, { expiresIn: 3600 });
 
         const publicUrl = `${process.env.VITE_R2_PUBLIC_URL.replace(/\/$/, '')}/${fileName}`;
