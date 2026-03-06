@@ -3,6 +3,8 @@ import { FiMaximize2, FiMusic, FiExternalLink } from 'react-icons/fi';
 import './MusicPlayer.css';
 
 export default function MusicPlayer() {
+    const playerUrl = window.location.hostname === 'localhost' ? 'http://localhost:5174' : 'https://monochrome.tf';
+
     return (
         <div className="monochrome-sidebar-integrated">
             <div className="monochrome-header">
@@ -12,7 +14,7 @@ export default function MusicPlayer() {
                     <span>Monochrome</span>
                 </div>
                 <div className="header-actions">
-                    <a href="http://localhost:5174" target="_blank" rel="noopener noreferrer" className="sidebar-action-btn" title="Open Dashboard">
+                    <a href={playerUrl} target="_blank" rel="noopener noreferrer" className="sidebar-action-btn" title="Open Dashboard">
                         <FiExternalLink />
                     </a>
                 </div>
@@ -20,7 +22,7 @@ export default function MusicPlayer() {
 
             <div className="monochrome-iframe-wrapper">
                 <iframe
-                    src="http://localhost:5174"
+                    src={playerUrl}
                     className="monochrome-embedded-iframe"
                     title="Monochrome Player"
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
