@@ -1,0 +1,17 @@
+.music-page {
+    width: 100%;
+    height: calc(100vh - 120px);
+    background: #000;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.music-page-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+}

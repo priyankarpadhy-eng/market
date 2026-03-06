@@ -1,0 +1,18 @@
+rules_version = '2';
+
+// Craft rules based on the specific paths for your project
+service firebase.storage {
+  match /b/{bucket}/o {
+  
+    // Match any file and check its metadata.
+    // Ensure file size is below 5 MB and it's an image.
+    match /{allPaths=**} {
+      allow read: if true; // Publicly readable for marketplace/community
+      allow write: if request.auth != null
+                    // Prevent files larger than 5MB
+                   && request.resource.size < 5 * 1024 * 1024 
+                   // Only allow image files
+                   && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

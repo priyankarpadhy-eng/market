@@ -1,0 +1,80 @@
+.home-page {
+    display: flex;
+    gap: 32px;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.home-feed {
+    flex: 1;
+    min-width: 0;
+}
+
+.feed-filters {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 20px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 8px;
+}
+
+.feed-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.feed-filter-btn:hover {
+    background: var(--bg-hover);
+}
+
+.feed-filter-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+.feed-filter-btn svg {
+    font-size: 1.05rem;
+}
+
+.feed-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.fab-create-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    border: none;
+    z-index: 1000;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.fab-create-btn:hover {
+    transform: scale(1.05);
+    background: #4338ca;
+}

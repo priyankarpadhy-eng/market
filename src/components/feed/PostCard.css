@@ -1,0 +1,947 @@
+.post-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    transition: box-shadow 0.2s;
+    animation: fadeIn 0.4s ease forwards;
+    position: relative;
+    z-index: 1;
+}
+
+.post-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.post-card.modal-active {
+    z-index: 100;
+    overflow: visible;
+}
+
+/* ═══════════════════════════════════════════════════════ */
+/* ── CONFESSION LETTER CARD ───────────────────────────── */
+/* ═══════════════════════════════════════════════════════ */
+
+.confession-letter-card {
+    background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 30%, #fff 70%);
+    border: 1px solid #fecdd3;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.confession-bg-hearts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.confession-bg-hearts span {
+    position: absolute;
+    font-size: 1.2rem;
+    color: #fda4af;
+    opacity: 0.08;
+    animation: floatHeart 6s ease-in-out infinite;
+}
+
+.confession-bg-hearts span:nth-child(1) {
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+    font-size: 1.5rem;
+}
+
+.confession-bg-hearts span:nth-child(2) {
+    top: 60%;
+    left: 15%;
+    animation-delay: 1s;
+    font-size: 1rem;
+}
+
+.confession-bg-hearts span:nth-child(3) {
+    top: 30%;
+    right: 10%;
+    animation-delay: 2s;
+    font-size: 2rem;
+}
+
+.confession-bg-hearts span:nth-child(4) {
+    bottom: 20%;
+    right: 25%;
+    animation-delay: 0.5s;
+    font-size: 1.2rem;
+}
+
+.confession-bg-hearts span:nth-child(5) {
+    top: 80%;
+    left: 40%;
+    animation-delay: 3s;
+    font-size: 0.9rem;
+}
+
+.confession-bg-hearts span:nth-child(6) {
+    top: 5%;
+    right: 30%;
+    animation-delay: 1.5s;
+}
+
+.confession-bg-hearts span:nth-child(7) {
+    bottom: 40%;
+    left: 55%;
+    animation-delay: 4s;
+    font-size: 1.8rem;
+}
+
+.confession-bg-hearts span:nth-child(8) {
+    top: 45%;
+    left: 80%;
+    animation-delay: 2.5s;
+}
+
+.confession-bg-hearts span:nth-child(9) {
+    bottom: 10%;
+    right: 5%;
+    animation-delay: 3.5s;
+    font-size: 1.4rem;
+}
+
+.confession-bg-hearts span:nth-child(10) {
+    top: 15%;
+    left: 60%;
+    animation-delay: 0.8s;
+    font-size: 1.1rem;
+}
+
+@keyframes floatHeart {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(10deg);
+    }
+}
+
+.confession-letter-layout {
+    display: flex;
+    position: relative;
+    z-index: 1;
+    min-height: 260px;
+}
+
+.confession-left {
+    flex: 0 0 200px;
+    background: linear-gradient(160deg, #ffe4e6, #fecdd3);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+.confession-heart-badge {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(5deg);
+    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.15);
+}
+
+.confession-title-text {
+    font-family: 'Georgia', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-style: italic;
+    color: #881337;
+    text-align: center;
+    line-height: 1.3;
+    margin: 0;
+    white-space: pre-line;
+}
+
+.confession-media-frame {
+    width: 150px;
+    height: 150px;
+    border-radius: 12px;
+    overflow: hidden;
+    transform: rotate(-3deg);
+    border: 4px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 6px 20px rgba(136, 19, 55, 0.15);
+    flex-shrink: 0;
+}
+
+.confession-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.confession-left-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.confession-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.6);
+    color: #881337;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.confession-action-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.confession-action-btn.active {
+    background: #e11d48;
+    color: white;
+}
+
+.confession-action-btn.small {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+}
+
+.confession-action-btn.delete:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Right Side - Letter */
+.confession-right {
+    flex: 1;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.5);
+    border-left: 1px dashed #fda4af;
+    position: relative;
+}
+
+.confession-letter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.confession-to {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #e11d48;
+    text-transform: uppercase;
+}
+
+.confession-date {
+    font-size: 0.72rem;
+    color: #f9a8d4;
+    font-style: italic;
+}
+
+.confession-letter-body {
+    flex: 1;
+    position: relative;
+    padding: 16px 20px;
+    border: 1px solid #fecdd3;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    min-height: 100px;
+}
+
+.confession-quote-mark {
+    font-family: 'Georgia', serif;
+    font-size: 2.5rem;
+    color: #fda4af;
+    line-height: 1;
+    position: absolute;
+}
+
+.confession-quote-mark.open {
+    top: 4px;
+    left: 8px;
+}
+
+.confession-quote-mark.close {
+    bottom: 4px;
+    right: 12px;
+}
+
+.confession-content {
+    font-family: 'Georgia', serif;
+    font-size: 0.95rem;
+    color: #881337;
+    line-height: 1.7;
+    margin: 0;
+    padding: 8px 20px 8px 16px;
+    font-style: italic;
+}
+
+.confession-letter-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed #fecdd3;
+}
+
+.confession-signed-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #e11d48;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.confession-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #881337;
+}
+
+.confession-author-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ffe4e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confession-right-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.confession-expiry {
+    position: relative;
+    z-index: 1;
+    font-size: 0.75rem;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #e11d48;
+    font-weight: 600;
+    background: rgba(255, 241, 242, 0.6);
+    border-top: 1px solid #fecdd3;
+}
+
+@media (max-width: 600px) {
+    .confession-letter-layout {
+        flex-direction: column;
+    }
+
+    .confession-left {
+        flex: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 16px;
+    }
+
+    .confession-media-frame {
+        width: 100px;
+        height: 100px;
+    }
+
+    .confession-right {
+        border-left: none;
+        border-top: 1px dashed #fda4af;
+    }
+}
+
+/* ═══════════════════════════════════════════ */
+/* ── FREELANCE POST CARD ─────────────────── */
+/* ═══════════════════════════════════════════ */
+
+.freelance-card {
+    background: linear-gradient(135deg, #fff5f5 0%, #fff 40%, #fff 100%);
+    border: 1px solid #fecaca;
+    position: relative;
+    overflow: hidden;
+}
+
+.freelance-bg-money {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.freelance-bg-money span {
+    position: absolute;
+    font-size: 2.8rem;
+    opacity: 0.08;
+    animation: floatMoney 8s ease-in-out infinite;
+}
+
+.freelance-bg-money span:nth-child(1) {
+    top: 5%;
+    left: 8%;
+    animation-delay: 0s;
+}
+
+.freelance-bg-money span:nth-child(2) {
+    top: 25%;
+    right: 12%;
+    animation-delay: 1s;
+}
+
+.freelance-bg-money span:nth-child(3) {
+    top: 55%;
+    left: 15%;
+    animation-delay: 2s;
+}
+
+.freelance-bg-money span:nth-child(4) {
+    bottom: 15%;
+    right: 8%;
+    animation-delay: 3s;
+}
+
+.freelance-bg-money span:nth-child(5) {
+    top: 80%;
+    left: 35%;
+    animation-delay: 1.5s;
+}
+
+.freelance-bg-money span:nth-child(6) {
+    bottom: 40%;
+    right: 40%;
+    animation-delay: 2.5s;
+}
+
+.freelance-bg-money span:nth-child(7) {
+    top: 15%;
+    left: 50%;
+    animation-delay: 4s;
+}
+
+.freelance-bg-money span:nth-child(8) {
+    bottom: 5%;
+    left: 60%;
+    animation-delay: 0.5s;
+}
+
+.freelance-bg-money span:nth-child(9) {
+    top: 40%;
+    right: 25%;
+    animation-delay: 5s;
+}
+
+.freelance-bg-money span:nth-child(10) {
+    bottom: 25%;
+    left: 5%;
+    animation-delay: 3.5s;
+}
+
+@keyframes floatMoney {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(15deg) scale(1.1);
+    }
+}
+
+/* ═══════════════════════════════════════════ */
+/* ── DISCUSSION POST CARD ────────────────── */
+/* ═══════════════════════════════════════════ */
+
+.discussion-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #fff 40%, #fff 100%);
+    border: 1px solid #bbf7d0;
+    position: relative;
+    overflow: hidden;
+}
+
+.discussion-bg-emojis {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.discussion-bg-emojis span {
+    position: absolute;
+    font-size: 2.2rem;
+    opacity: 0.08;
+    animation: floatEmoji 7s ease-in-out infinite;
+}
+
+.discussion-bg-emojis span:nth-child(1) {
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.discussion-bg-emojis span:nth-child(2) {
+    top: 30%;
+    right: 15%;
+    animation-delay: 1.5s;
+}
+
+.discussion-bg-emojis span:nth-child(3) {
+    top: 50%;
+    left: 20%;
+    animation-delay: 3s;
+}
+
+.discussion-bg-emojis span:nth-child(4) {
+    bottom: 10%;
+    right: 10%;
+    animation-delay: 4.5s;
+}
+
+.discussion-bg-emojis span:nth-child(5) {
+    top: 75%;
+    left: 40%;
+    animation-delay: 2s;
+}
+
+.discussion-bg-emojis span:nth-child(6) {
+    bottom: 35%;
+    right: 45%;
+    animation-delay: 0.5s;
+}
+
+.discussion-bg-emojis span:nth-child(7) {
+    top: 20%;
+    left: 55%;
+    animation-delay: 5s;
+}
+
+.discussion-bg-emojis span:nth-child(8) {
+    bottom: 15%;
+    left: 65%;
+    animation-delay: 1s;
+}
+
+.discussion-bg-emojis span:nth-child(9) {
+    top: 45%;
+    right: 30%;
+    animation-delay: 3.5s;
+}
+
+.discussion-bg-emojis span:nth-child(10) {
+    bottom: 55%;
+    left: 5%;
+    animation-delay: 2.5s;
+}
+
+@keyframes floatEmoji {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg) scale(1.1);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(-10deg) scale(1);
+    }
+}
+
+/* ═══════════════════════════════════════════ */
+/* ── REPORT MODAL PREMIUM ─────────────────── */
+/* ═══════════════════════════════════════════ */
+
+.report-card-premium {
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    background: var(--bg-white);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 320px;
+    animation: slideInDownExtra 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.report-card-premium h5 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.report-card-premium .subtitle {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    margin: 4px 0 20px 0;
+}
+
+.report-option-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    margin-bottom: 8px;
+    background: var(--bg-hover);
+}
+
+.report-option-label:hover {
+    background: #fff1f2;
+    color: #ef4444;
+}
+
+.report-option-label.selected {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #ef4444;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08);
+}
+
+.report-submit-btn {
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.report-submit-btn:not(:disabled) {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    box-shadow: 0 8px 20px -6px rgba(239, 68, 68, 0.4);
+}
+
+.report-submit-btn:disabled {
+    background: var(--bg-active);
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+}
+
+.report-submit-btn:not(:disabled):hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 25px -8px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes slideInDownExtra {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ═══════════════════════════════════════ */
+/* Old confession-card class (no longer used but kept for safety) */
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.post-author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-hover);
+}
+
+.post-header-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.post-author-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+.post-author-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.post-role-badge {
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.post-meta-line {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+}
+
+.post-community-link {
+    color: var(--text-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.post-community-link:hover {
+    text-decoration: underline;
+}
+
+.post-options-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.post-options-btn:hover {
+    color: var(--text-secondary);
+}
+
+.post-content-container {
+    padding: 0 16px 12px 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.post-title {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.post-title:hover {
+    color: var(--primary);
+}
+
+.post-content-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.post-media-container {
+    width: 100%;
+}
+
+.post-media-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    display: block;
+}
+
+.post-tags-container {
+    padding: 16px 16px 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+}
+
+.post-tag-pill {
+    background: var(--bg-hover);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 16px;
+    text-transform: capitalize;
+}
+
+/* Colorful Overrides applied inline */
+.post-tag-pill.colorful {
+    background-color: var(--pill-bg, #f1f5f9);
+    color: var(--pill-color, #475569);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.post-footer-left,
+.post-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.post-vote-group {
+    display: flex;
+    align-items: center;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 2px;
+}
+
+.vote-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-tertiary);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+}
+
+.vote-btn:hover {
+    background: var(--bg-active);
+}
+
+.vote-btn.active-up {
+    color: #f97316;
+    background: #ffedd5;
+}
+
+.vote-btn.active {
+    color: var(--primary);
+    background: #f3f0ff;
+}
+
+.vote-count {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    min-width: 24px;
+    text-align: center;
+}
+
+.post-footer-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.post-footer-btn svg {
+    font-size: 1.15rem;
+}
+
+.post-footer-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.post-footer-btn.active {
+    color: var(--primary);
+}
+
+.post-footer-btn.delete:hover {
+    color: #ef4444;
+    background: #fef2f2;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

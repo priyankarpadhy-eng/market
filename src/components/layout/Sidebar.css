@@ -1,0 +1,135 @@
+.sidebar {
+    position: sticky;
+    top: 70px;
+    width: 220px;
+    min-width: 220px;
+    height: calc(100vh - 70px);
+    padding: 20px 16px;
+    overflow-y: auto;
+    border-right: 1px solid var(--border-medium);
+}
+
+.sidebar-section {
+    margin-bottom: 28px;
+}
+
+.sidebar-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-tertiary);
+    padding: 0 12px;
+    margin-bottom: 8px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sidebar-link:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.sidebar-link.active {
+    background: var(--primary);
+    color: var(--text-inverse);
+}
+
+.sidebar-link-icon {
+    font-size: 1.15rem;
+    width: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-community {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sidebar-community:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.sidebar-community-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+}
+
+.sidebar-show-more {
+    padding: 8px 12px;
+    font-size: 0.83rem;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.sidebar-show-more:hover {
+    color: var(--primary-hover);
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        display: none;
+    }
+}
+
+.sidebar-music-container {
+    position: fixed;
+    bottom: 24px;
+    left: 240px;
+    /* Width of sidebar (220px) + 20px padding */
+    width: 380px;
+    z-index: 2000;
+    animation: slideRight 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}

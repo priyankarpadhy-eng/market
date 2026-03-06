@@ -1,0 +1,34 @@
+.layout {
+    display: flex;
+    min-height: calc(100vh - 70px);
+    position: relative;
+}
+
+.layout::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40vw;
+    height: 40vw;
+    background-image: url('/images/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.layout-content {
+    flex: 1;
+    min-width: 0;
+    padding: 24px;
+}
+
+@media (max-width: 768px) {
+    .layout-content {
+        padding: 16px;
+    }
+}
