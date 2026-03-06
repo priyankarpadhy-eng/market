@@ -58,8 +58,14 @@ export default function Marketplace() {
 
         setUploading(true);
         setErrorMsg('');
-        let imageUrl = '/images/textbook.png'; // default fallback
-
+        const defaultImages = {
+            'Textbooks': '/images/textbook.png',
+            'Furniture': 'https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=600&q=80',
+            'Electronics': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=600&q=80',
+            'Clothing': 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
+            'Housing': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80'
+        };
+        let imageUrl = defaultImages[newItem.category] || '/images/logo.png';
         if (file) {
             try {
                 imageUrl = await uploadFile(file, 'listings');

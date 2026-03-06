@@ -443,10 +443,28 @@ export async function getUserByEmail(email) {
 
 export async function getUserByNickname(nickname) {
     if (!nickname) return null;
-    const q = query(collection(db, 'users'), where('displayName', '==', nickname.trim()), limit(1));
-    const snap = await getDocs(q);
-    if (snap.empty) return null;
-    return { uid: snap.docs[0].id, ...snap.docs[0].data() };
+    const cleanNick = nickname.trim();
+
+    // 1. Try exact match first
+    const exactQ = query(collection(db, 'users'), where('displayName', '==', cleanNick), limit(1));
+    const exactSnap = await getDocs(exactQ);
+    if (!exactSnap.empty) {
+        return { uid: exactSnap.docs[0].id, ...exactSnap.docs[0].data() };
+    }
+
+    // 2. Fallback to case-insensitive match (fetches all users - safe for MVP scale)
+    const allUsersQ = query(collection(db, 'users'));
+    const allUsersSnap = await getDocs(allUsersQ);
+    const lowerNick = cleanNick.toLowerCase();
+
+    for (const doc of allUsersSnap.docs) {
+        const data = doc.data();
+        if (data.displayName && data.displayName.toLowerCase() === lowerNick) {
+            return { uid: doc.id, ...data };
+        }
+    }
+
+    return null;
 }
 
 export async function getUserPosts(userId) {

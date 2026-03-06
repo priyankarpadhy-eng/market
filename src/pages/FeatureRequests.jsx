@@ -42,8 +42,8 @@ export default function FeatureRequests() {
                 votes: 0,
                 voterIds: [],
                 status: 'pending',
-                authorId: currentUser.uid,
-                authorName: currentUser.displayName || 'Anonymous',
+                authorId: currentUser?.uid || 'guest',
+                authorName: currentUser?.displayName || 'Anonymous',
                 createdAt: serverTimestamp(),
             });
             setShowModal(false);

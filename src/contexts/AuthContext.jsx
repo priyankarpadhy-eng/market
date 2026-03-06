@@ -87,13 +87,14 @@ export function AuthProvider({ children }) {
 
     // Login
     async function login(emailOrNickname, password) {
-        let targetEmail = emailOrNickname;
+        let inputStr = emailOrNickname.trim();
+        let targetEmail = inputStr;
 
         // Check if it's an email or a nickname
-        if (!emailOrNickname.includes('@')) {
-            const userDoc = await getUserByNickname(emailOrNickname);
+        if (!inputStr.includes('@')) {
+            const userDoc = await getUserByNickname(inputStr);
             if (!userDoc || !userDoc.email) {
-                throw new Error('User not found with this nickname.');
+                throw new Error('No valid account found with this nickname.');
             }
             targetEmail = userDoc.email;
         }
