@@ -1,6 +1,6 @@
 import { uploadToR2 } from './r2';
 
-const MAX_FILE_SIZE_MB = 50; // 50MB limit
+const MAX_FILE_SIZE_MB = 4; // 4MB limit for Vercel Serverless Functions
 
 export async function uploadFile(file, folder = 'uploads', onProgress) {
     if (!file) throw new Error('No file provided');

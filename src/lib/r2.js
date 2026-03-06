@@ -22,8 +22,25 @@ export async function uploadToR2(file, folder = 'uploads') {
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Upload failed');
+            let errorMsg = 'Upload failed';
+            try {
+                // Safely attempt to parse JSON, if it fails, it will go to catch block
+                const text = await response.text();
+                try {
+                    const errorData = JSON.parse(text);
+                    errorMsg = errorData.error || errorMsg;
+                } catch (e) {
+                    // Fallback to text if it's not JSON
+                    if (response.status === 413) {
+                        errorMsg = 'File is too large (Vercel limit is 4.5MB). Please choose a smaller file.';
+                    } else {
+                        errorMsg = text || `HTTP Error ${response.status}`;
+                    }
+                }
+            } catch (e) {
+                errorMsg = `HTTP Error ${response.status}`;
+            }
+            throw new Error(errorMsg);
         }
 
         const { url } = await response.json();
