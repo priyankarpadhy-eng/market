@@ -105,7 +105,13 @@ export default function FeatureRequests() {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.96 }}
                     className="create-feature-btn"
-                    onClick={() => setShowModal(true)}
+                    onClick={() => {
+                        if (!currentUser || currentUser.isAnonymous) {
+                            setError('You must be logged in to suggest features (not a guest).');
+                            return;
+                        }
+                        setShowModal(true);
+                    }}
                     style={{
                         display: 'flex', alignItems: 'center', gap: '8px',
                         padding: '12px 24px', background: 'var(--primary)', color: 'white',

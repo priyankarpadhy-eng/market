@@ -452,14 +452,26 @@ export async function getUserByNickname(nickname) {
         return { uid: exactSnap.docs[0].id, ...exactSnap.docs[0].data() };
     }
 
-    // 2. Fallback to case-insensitive match (fetches all users - safe for MVP scale)
+    // 2. Fallback to highly resilient match (fetches all users - safe for MVP scale)
     const allUsersQ = query(collection(db, 'users'));
     const allUsersSnap = await getDocs(allUsersQ);
-    const lowerNick = cleanNick.toLowerCase();
+
+    // Completely strip all spaces and lowercase the input
+    const targetNick = cleanNick.toLowerCase().replace(/\s+/g, '');
 
     for (const doc of allUsersSnap.docs) {
         const data = doc.data();
-        if (data.displayName && data.displayName.toLowerCase() === lowerNick) {
+        // Check multiple fields for a possible username match
+        const nameField = data.displayName || data.name || data.username || '';
+        const emailPrefix = data.email ? data.email.split('@')[0] : '';
+
+        const possibleMatches = [
+            nameField.toLowerCase().replace(/\s+/g, ''),
+            emailPrefix.toLowerCase(),
+            doc.id.toLowerCase() // uid fallback
+        ];
+
+        if (possibleMatches.includes(targetNick)) {
             return { uid: doc.id, ...data };
         }
     }

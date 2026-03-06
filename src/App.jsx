@@ -18,6 +18,7 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Support from './pages/Support';
 import Music from './pages/Music';
+import Events from './pages/Events';
 import { useAuth } from './contexts/AuthContext';
 import EmailVerificationModal from './components/auth/EmailVerificationModal';
 
@@ -42,6 +43,7 @@ function AppRoutes() {
       {/* Protected routes inside Layout */}
       <Route element={(currentUser && !currentUser.isAnonymous) ? <Layout /> : <Navigate to="/" />}>
         <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/events" element={<Events />} />
         <Route path="/music" element={<Music />} />
         <Route path="/feature-requests" element={<FeatureRequests />} />
         <Route path="/members" element={<Members />} />

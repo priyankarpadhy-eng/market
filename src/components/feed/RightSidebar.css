@@ -8,7 +8,14 @@
     top: 90px;
     height: calc(100vh - 110px);
     align-self: flex-start;
-    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.right-sidebar::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
 }
 
 /* Footer */

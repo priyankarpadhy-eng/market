@@ -53,8 +53,6 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    max-height: 480px;
-    overflow-y: auto;
 }
 
 .events-list::-webkit-scrollbar {

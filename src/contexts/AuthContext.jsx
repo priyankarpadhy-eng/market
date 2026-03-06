@@ -93,8 +93,19 @@ export function AuthProvider({ children }) {
         // Check if it's an email or a nickname
         if (!inputStr.includes('@')) {
             const userDoc = await getUserByNickname(inputStr);
-            if (!userDoc || !userDoc.email) {
-                throw new Error('No valid account found with this nickname.');
+            if (!userDoc) {
+                // FALLBACK: Try university domain if nickname not found in Firestore
+                const campusEmail = `${inputStr.toLowerCase()}@igitsarang.ac.in`;
+                try {
+                    const result = await signInWithEmailAndPassword(auth, campusEmail, password);
+                    return result;
+                } catch (fallbackErr) {
+                    // If fallback also fails, throw a clear error
+                    throw new Error(`Account not found for '${inputStr}'. If you registered with a different name, please use your email.`);
+                }
+            }
+            if (!userDoc.email) {
+                throw new Error(`Account found for '${inputStr}', but no email address is linked to it.`);
             }
             targetEmail = userDoc.email;
         }
