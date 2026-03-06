@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiHome, FiCompass, FiShoppingBag, FiMessageCircle, FiUsers, FiUser, FiSettings, FiLogOut, FiShield, FiCode, FiHeart, FiMusic, FiAward } from 'react-icons/fi';
+import { FiHome, FiCompass, FiShoppingBag, FiMessageCircle, FiUsers, FiUser, FiSettings, FiLogOut, FiShield, FiCode, FiHeart, FiMusic, FiAward, FiCalendar } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import MusicPlayer from '../music/MusicPlayer';
 
