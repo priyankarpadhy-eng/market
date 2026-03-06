@@ -30,7 +30,8 @@ export default function MusicPlayer() {
             </div>
 
             <div className="monochrome-footer">
-                <span>High Fidelity Audio Engine</span>
+                <span className="footer-engine">High Fidelity Audio Engine</span>
+                <span className="footer-disclaimer">Third-party content. Not hosted or stored by us.</span>
             </div>
         </div>
     );

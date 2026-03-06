@@ -86,6 +86,14 @@ export default function Terms() {
                             </h2>
                             <p>Marketplace and its active creators shall not be held liable for any indirect, incidental, severe, or absolute consequential damages definitively resulting from the use of our services, including but not limited to lost profits, targeted data loss, or physical harm directly resulting from user-coordinated meetups.</p>
                         </section>
+
+                        <section>
+                            <h2 style={{ color: 'var(--lp-text)', fontSize: '1.5rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{ width: '6px', height: '24px', background: '#6366f1', borderRadius: '4px' }}></div>
+                                5. Third-Party Services & Music
+                            </h2>
+                            <p>The application integrates certain third-party experiences, including the music player. <strong>We do not host the music player engine, nor do we store, upload, or possess any music files</strong> on our servers. All music content is streamed directly from third-party providers. We are not responsible for the availability, copyright status, or content of these external services.</p>
+                        </section>
                     </div>
                 </div>
             </div>

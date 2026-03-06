@@ -11,6 +11,9 @@ export default function Music() {
                 title="Monochrome Player"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             />
+            <div className="music-page-footer">
+                <p>Note: We do not host the music player or store any music on our servers. This is an integrated third-party experience.</p>
+            </div>
         </div>
     );
 }
