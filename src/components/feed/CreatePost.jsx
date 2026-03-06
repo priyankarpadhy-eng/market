@@ -91,12 +91,12 @@ export default function CreatePost({ onPostSuccess, isModal = false }) {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Validation limits: 10MB image, 50MB video (or whatever your R2 storage supports)
+        // Validation limits: strictly 50MB for any file
         const isVideo = file.type.startsWith('video/');
-        const maxSize = isVideo ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+        const maxSize = 50 * 1024 * 1024;
 
         if (file.size > maxSize) {
-            setError(`File too large. Maximum size is ${isVideo ? '50MB' : '10MB'}`);
+            setError(`File too large. Maximum size is 50MB limit.`);
             return;
         }
 
@@ -118,6 +118,7 @@ export default function CreatePost({ onPostSuccess, isModal = false }) {
                     src={currentUser?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'}
                     alt="User"
                     className="create-post-avatar"
+                    onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser?.displayName || 'User'}`; }}
                 />
                 <div className="create-post-title">
                     <h4>{currentUser ? `What's on your mind, ${currentUser.displayName.split(' ')[0]}?` : 'Share a confession anonymously'}</h4>

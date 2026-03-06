@@ -224,6 +224,7 @@ export default function PostCard({ post, index = 0 }) {
                     src={post.authorAvatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'}
                     alt={post.authorName}
                     className="post-author-avatar"
+                    onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.authorName || 'Marketplace'}`; }}
                 />
                 <div className="post-header-text">
                     <div className="post-author-line">

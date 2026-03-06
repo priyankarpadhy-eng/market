@@ -148,7 +148,7 @@ export default function Profile() {
             )}
             <div className="profile-card animate-fadeIn">
                 <div className="profile-avatar-wrapper">
-                    <img src={profile.avatar || profile.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'} alt={profile.displayName} className="profile-avatar" style={{ opacity: uploadingAvatar ? 0.5 : 1 }} />
+                    <img src={profile.avatar || profile.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace'} alt={profile.displayName} className="profile-avatar" style={{ opacity: uploadingAvatar ? 0.5 : 1 }} onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.displayName || 'Marketplace'}`; }} />
                     <label className="profile-avatar-edit" title="Change photo" style={{ cursor: 'pointer' }}>
                         <FiCamera />
                         <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarUpload} disabled={uploadingAvatar} />
