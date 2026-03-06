@@ -8,6 +8,9 @@ const r2Client = new S3Client({
         accessKeyId: process.env.VITE_R2_ACCESS_KEY_ID,
         secretAccessKey: process.env.VITE_R2_SECRET_ACCESS_KEY,
     },
+    // Explicitly disable the AWS SDK Checksum injections that break Cloudflare R2 URL matching.
+    requestChecksumCalculation: "WHEN_NOT_REQUIRED",
+    responseChecksumValidation: "WHEN_NOT_REQUIRED",
 });
 
 export default async function handler(req, res) {
@@ -25,7 +28,6 @@ export default async function handler(req, res) {
         const command = new PutObjectCommand({
             Bucket: process.env.VITE_R2_BUCKET,
             Key: fileName,
-            ContentType: contentType, // Strongly enforce ContentType constraint
         });
 
         const signedUrl = await getSignedUrl(r2Client, command, { expiresIn: 3600 });

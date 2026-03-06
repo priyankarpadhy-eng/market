@@ -23,12 +23,9 @@ export async function uploadToR2(file, folder = 'uploads') {
         const { uploadUrl, publicUrl } = await presignRes.json();
 
         // 2. Upload the file DIRECTLY to Cloudflare R2 using the Pre-Signed URL
-        // Content-Type strictly passed here to match the generated AWS signature
+        // Content-Type is inferred by the browser from the 'file' object.
         const uploadRes = await fetch(uploadUrl, {
             method: 'PUT',
-            headers: {
-                'Content-Type': file.type
-            },
             body: file
         });
 
