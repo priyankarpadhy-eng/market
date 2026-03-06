@@ -1,73 +1,65 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-
-// Direct AWS SDK Implementation. 
-// Now that the Cloudflare bucket has a wildcard (*) CORS policy, 
-// the SDK can perfectly manage the complex signature headers natively.
-
-const S3_BUCKET = import.meta.env.VITE_R2_BUCKET || 'market-media';
-const R2_ACCOUNT_ID = import.meta.env.VITE_R2_ACCOUNT_ID;
-const ACCESS_KEY_ID = import.meta.env.VITE_R2_ACCESS_KEY_ID;
-const SECRET_ACCESS_KEY = import.meta.env.VITE_R2_SECRET_ACCESS_KEY;
-const PUBLIC_URL = import.meta.env.VITE_R2_PUBLIC_URL || '';
-
-let r2Client = null;
-
-if (R2_ACCOUNT_ID && ACCESS_KEY_ID && SECRET_ACCESS_KEY) {
-    try {
-        r2Client = new S3Client({
-            region: 'auto',
-            endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-            credentials: {
-                accessKeyId: ACCESS_KEY_ID,
-                secretAccessKey: SECRET_ACCESS_KEY,
-            },
-            // Enforce path-style to prevent cross-origin signature failures
-            forcePathStyle: true,
-            // Strictly disable checksums so the SDK doesn't inject 'amz-sdk-checksum' headers
-            // that aren't defined in the bucket's allowed CORS exposed headers table
-            requestChecksumCalculation: "WHEN_NOT_REQUIRED",
-            responseChecksumValidation: "WHEN_NOT_REQUIRED",
-        });
-    } catch (e) {
-        console.error('Failed to initialize R2 Client:', e);
-    }
-}
-
 /**
- * Upload a file to Cloudflare R2
+ * Upload a file to Cloudflare R2 using a **Pre-Signed POST form**.
+ * This forces the browser to treat the upload as a "Simple Request" via standard HTML
+ * form data (multipart/form-data), thereby entirely circumventing the broken CORS
+ * OPTIONS Preflight checks failing on the Cloudflare bucket.
+ * 
  * @param {File} file - The file to upload
  * @param {string} folder - The folder prefix (e.g., 'avatars', 'posts')
  * @returns {Promise<string>} The public URL of the uploaded file
  */
 export async function uploadToR2(file, folder = 'uploads') {
-    if (!r2Client) {
-        console.warn('R2 Client is not initialized. Check your environment variables.');
-        return URL.createObjectURL(file);
-    }
-
     try {
         const fileExt = file.name.split('.').pop();
         const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = new Uint8Array(arrayBuffer);
-
-        const command = new PutObjectCommand({
-            Bucket: S3_BUCKET,
-            Key: fileName,
-            Body: buffer,
-            ContentType: file.type,
+        // 1. Ask Vercel backend for a Pre-Signed POST configuration
+        const presignRes = await fetch('/api/get-upload-url', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fileName: fileName,
+                contentType: file.type
+            })
         });
 
-        await r2Client.send(command);
-
-        if (PUBLIC_URL) {
-            return `${PUBLIC_URL.replace(/\/$/, '')}/${fileName}`;
-        } else {
-            return `https://${S3_BUCKET}.${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${fileName}`;
+        if (!presignRes.ok) {
+            const err = await presignRes.json();
+            throw new Error(`Failed to generate secure upload link: ${err.error || 'Unknown'}`);
         }
+
+        const { url, fields, publicUrl } = await presignRes.json();
+
+        // 2. Build the exact multipart/form-data form requested by AWS S3/Cloudflare API
+        const formData = new FormData();
+
+        // AWS S3 / Cloudflare REQUIRES all signature fields to be appended FIRST.
+        Object.entries(fields).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        // The exact file stream must be appended LAST.
+        formData.append('file', file);
+
+        // 3. Upload the file DIRECTLY to Cloudflare R2 using standard POST
+        // This makes the browser view it as a normal HTML form submit—NO OPTIONS preflight.
+        const uploadRes = await fetch(url, {
+            method: 'POST',
+            // DO NOT set 'Content-Type' manually!
+            // When passing FormData, the browser auto-generates the boundary (e.g. multipart/form-data; boundary=----WebKitFormBoundary...)
+            body: formData
+        });
+
+        if (!uploadRes.ok) {
+            throw new Error(`Cloudflare rejected the upload POST. Status: ${uploadRes.status}`);
+        }
+
+        // Return the final formatted URL
+        return publicUrl;
     } catch (error) {
-        console.error('Direct R2 Upload Error:', error);
-        throw new Error('Failed to upload image. Please try again.');
+        console.error('Presigned POST R2 Upload Error:', error);
+        throw new Error(error.message || 'Failed to upload image. Please try again.');
     }
 }
