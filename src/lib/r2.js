@@ -1,8 +1,5 @@
 /**
- * Upload a file to Cloudflare R2 using a **Pre-Signed POST form**.
- * This forces the browser to treat the upload as a "Simple Request" via standard HTML
- * form data (multipart/form-data), thereby entirely circumventing the broken CORS
- * OPTIONS Preflight checks failing on the Cloudflare bucket.
+ * Upload a file to Cloudflare R2 using a **Pre-Signed PUT**.
  * 
  * @param {File} file - The file to upload
  * @param {string} folder - The folder prefix (e.g., 'avatars', 'posts')
@@ -13,7 +10,7 @@ export async function uploadToR2(file, folder = 'uploads') {
         const fileExt = file.name.split('.').pop();
         const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
-        // 1. Ask Vercel backend for a Pre-Signed POST configuration
+        // 1. Ask Vercel backend for a Pre-Signed PUT configuration
         const presignRes = await fetch('/api/get-upload-url', {
             method: 'POST',
             headers: {
@@ -30,36 +27,25 @@ export async function uploadToR2(file, folder = 'uploads') {
             throw new Error(`Failed to generate secure upload link: ${err.error || 'Unknown'}`);
         }
 
-        const { url, fields, publicUrl } = await presignRes.json();
+        const { url, publicUrl } = await presignRes.json();
 
-        // 2. Build the exact multipart/form-data form requested by AWS S3/Cloudflare API
-        const formData = new FormData();
-
-        // AWS S3 / Cloudflare REQUIRES all signature fields to be appended FIRST.
-        Object.entries(fields).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
-
-        // The exact file stream must be appended LAST.
-        formData.append('file', file);
-
-        // 3. Upload the file DIRECTLY to Cloudflare R2 using standard POST
-        // This makes the browser view it as a normal HTML form submit—NO OPTIONS preflight.
+        // 2. Upload the file DIRECTLY to Cloudflare R2 using standard PUT
         const uploadRes = await fetch(url, {
-            method: 'POST',
-            // DO NOT set 'Content-Type' manually!
-            // When passing FormData, the browser auto-generates the boundary (e.g. multipart/form-data; boundary=----WebKitFormBoundary...)
-            body: formData
+            method: 'PUT',
+            headers: {
+                'Content-Type': file.type
+            },
+            body: file
         });
 
         if (!uploadRes.ok) {
-            throw new Error(`Cloudflare rejected the upload POST. Status: ${uploadRes.status}`);
+            throw new Error(`Cloudflare rejected the upload. Status: ${uploadRes.status}`);
         }
 
         // Return the final formatted URL
         return publicUrl;
     } catch (error) {
-        console.error('Presigned POST R2 Upload Error:', error);
+        console.error('Upload Error:', error);
         throw new Error(error.message || 'Failed to upload image. Please try again.');
     }
 }
