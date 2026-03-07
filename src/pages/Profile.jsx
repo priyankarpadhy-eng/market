@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiEdit2, FiCamera, FiCalendar, FiMapPin, FiShield, FiStar, FiZap } from 'react-icons/fi';
+import { FiEdit2, FiCamera, FiCalendar, FiMapPin, FiShield, FiStar, FiZap, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserProfile, updateUserProfile, isNicknameAvailable } from '../firebase/services';
 import { uploadFile } from '../lib/storage';
@@ -7,7 +7,7 @@ import './Profile.css';
 
 
 export default function Profile() {
-    const { currentUser, updateUserProfile: updateAuthProfile, isAdmin } = useAuth();
+    const { currentUser, updateUserProfile: updateAuthProfile, isAdmin, logout } = useAuth();
     const [profile, setProfile] = useState({
         displayName: '',
         major: '',
@@ -157,9 +157,14 @@ export default function Profile() {
                 <div className="profile-info">
                     <div className="profile-info-top">
                         <h1 className="profile-name">{profile.displayName}</h1>
-                        <button className="profile-edit-btn" onClick={() => setShowEditModal(true)} id="edit-profile-btn">
-                            <FiEdit2 size={14} /> Edit Profile
-                        </button>
+                        <div className="profile-actions-wrapper">
+                            <button className="profile-edit-btn" onClick={() => setShowEditModal(true)} id="edit-profile-btn">
+                                <FiEdit2 size={14} /> Edit Profile
+                            </button>
+                            <button className="profile-logout-btn" onClick={logout} id="profile-logout-btn">
+                                <FiLogOut size={14} /> Logout
+                            </button>
+                        </div>
                     </div>
                     {profile.major && <div className="profile-major"><span>&lt;/&gt;</span> {profile.major}</div>}
                     <div className="profile-meta">

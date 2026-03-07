@@ -70,7 +70,8 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     border: none;
-    z-index: 1000;
+    z-index: 1005;
+    /* Above most system UI */
     transition: transform 0.2s, background 0.2s;
 }
 
@@ -105,8 +106,8 @@
 
 @media (max-width: 640px) {
     .fab-create-btn {
-        bottom: 80px;
-        /* Stay above bottom nav */
+        bottom: 90px;
+        /* Stay clearly above bottom nav */
         right: 16px;
         width: 54px;
         height: 54px;
