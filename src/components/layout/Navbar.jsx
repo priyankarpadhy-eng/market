@@ -150,7 +150,7 @@ export default function Navbar() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="profile-modal-overlay"
-                        style={{ zIndex: 9999 }}
+                        style={{ zIndex: 20000 }}
                         onClick={() => setShowCreateModal(false)}
                     >
                         <motion.div
