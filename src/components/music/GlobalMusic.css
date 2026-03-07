@@ -131,10 +131,11 @@
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
+        bottom: 64px;
+        /* Leave room for bottom Navbar */
         border-radius: 0;
-        z-index: 1001;
-        /* Above navbar for true full page breakout */
+        z-index: 100;
+        /* Ensure it stays behind the navbar (which is 1000) */
     }
 
     .mini-player {
