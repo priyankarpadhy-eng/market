@@ -7,6 +7,10 @@
     padding: 20px 16px;
     overflow-y: auto;
     border-right: 1px solid var(--border-medium);
+    z-index: 1500;
+    /* Ensure sidebar is above content but below modals (11000+) */
+    background: var(--bg-white);
+    /* Ensure it's opaque */
 }
 
 .sidebar-section {

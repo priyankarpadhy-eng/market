@@ -398,6 +398,23 @@
     margin: auto;
 }
 
+@media (max-width: 600px) {
+    .profile-modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+        /* Slide up from bottom feel */
+    }
+
+    .profile-modal {
+        max-width: 100% !important;
+        width: 100% !important;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
+        margin: 0;
+        max-height: 95vh;
+        padding: 24px 20px 40px 20px;
+    }
+}
+
 .profile-modal h2 {
     font-size: 1.3rem;
     font-weight: 800;

@@ -70,9 +70,20 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     border: none;
-    z-index: 1005;
-    /* Above most system UI */
-    transition: transform 0.2s, background 0.2s;
+    z-index: 10001;
+    /* Above global music player (9999) */
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+.fab-create-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    background: var(--primary-hover);
+    box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
+}
+
+.fab-create-btn:active {
+    transform: scale(0.9);
 }
 
 @media (max-width: 768px) {
@@ -107,10 +118,19 @@
 @media (max-width: 640px) {
     .fab-create-btn {
         bottom: 120px;
-        /* Increased spacing to clear bottom nav and music player */
-        right: 16px;
-        width: 54px;
-        height: 54px;
-        font-size: 1.5rem;
+        /* Clears bottom nav + music player */
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+    }
+}
+
+/* Adjust Desktop position to clear the music mini-player area if it's there */
+@media (min-width: 641px) {
+    .fab-create-btn {
+        bottom: 230px;
+        /* Sits above the mini player (which is ~200px from bottom) */
+        right: 32px;
     }
 }

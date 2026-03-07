@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare2, FiBookmark, FiDownload, FiFile, FiClock, FiShield, FiTrash2, FiMoreHorizontal, FiHeart, FiFlag, FiX, FiBriefcase, FiDollarSign, FiPhoneCall } from 'react-icons/fi';
+import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare2, FiBookmark, FiDownload, FiFile, FiClock, FiShield, FiTrash2, FiMoreHorizontal, FiHeart, FiFlag, FiX, FiBriefcase, FiDollarSign, FiPhoneCall, FiFeather, FiMap } from 'react-icons/fi';
 import { votePost, deletePost, reportPost } from '../../firebase/services';
 import { useAuth } from '../../contexts/AuthContext';
 import './PostCard.css';
@@ -87,6 +87,7 @@ export default function PostCard({ post, index = 0 }) {
     const daysOld = Math.floor((now - pTime) / (1000 * 60 * 60 * 24));
     const daysLeft = Math.max(0, 7 - daysOld);
     const isConfession = post.tag && post.tag.toLowerCase() === 'confession';
+    const isPoem = post.tag && post.tag.toLowerCase() === 'poem';
     const isFreelancing = post.tag && post.tag.toLowerCase() === 'freelancing';
     const isDiscussion = post.tag && post.tag.toLowerCase() === 'discussion';
     const isImmortal = votes >= 50;
@@ -102,6 +103,77 @@ export default function PostCard({ post, index = 0 }) {
         const hash = tagName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
         return colors[hash % colors.length];
     };
+
+    // ═══════════════════════════════════════════
+    // POEM CARD - Forest Hill Theme
+    // ═══════════════════════════════════════════
+    if (isPoem) {
+        const hasMedia = post.image || post.video;
+        return (
+            <article className="poem-forest-card" style={{ animationDelay: `${index * 0.08}s` }}>
+                <div className="poem-bg-leaves">
+                    <span>🍃</span><span>🌿</span><span>🍃</span><span>🍂</span><span>🌱</span>
+                </div>
+
+                <div className="poem-layout">
+                    {/* Left Side - Mountain/Forest Accent */}
+                    <div className="poem-left">
+                        <div className="poem-mountain-icon">
+                            <FiMap />
+                        </div>
+                        <h2 className="poem-title">{post.title || 'Soul of\nThe Woods'}</h2>
+                        <div className="poem-divider"></div>
+
+                        {hasMedia && (
+                            <div className="poem-media-frame">
+                                {post.video ? (
+                                    <video src={post.video} controls className="confession-media" />
+                                ) : (
+                                    <img src={post.image} alt="poem" className="confession-media" loading="lazy" />
+                                )}
+                            </div>
+                        )}
+
+                        <div className="confession-left-actions" style={{ marginTop: 'auto', color: 'white' }}>
+                            <button className="confession-action-btn" style={{ color: 'white' }} onClick={() => handleVote(1)}>
+                                <FiArrowUp /> {formatVotes(votes)}
+                            </button>
+                            <button className="confession-action-btn" style={{ color: 'white' }} onClick={handleShare}>
+                                <FiShare2 />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Right Side - Paper Content */}
+                    <div className="poem-right">
+                        <div className="poem-header">
+                            <span className="poem-tag-label">LITERARY POEM</span>
+                            <span className="poem-date">Dated: {dateStr}</span>
+                        </div>
+
+                        <div className="poem-body">
+                            <FiFeather className="poem-quote" style={{ opacity: 0.2, top: 0, left: 0 }} />
+                            <p className="poem-content">{post.content}</p>
+                        </div>
+
+                        <div className="poem-footer">
+                            <div className="poem-author-box">
+                                <span className="poem-author-label">WRITTEN WITH SOUL</span>
+                                <div className="poem-author-name">~ {post.authorName || 'Anonymous Bard'}</div>
+                            </div>
+                            <button className="poem-action-btn" onClick={() => navigate(`/post/${post.id}`)}>
+                                <FiMessageSquare /> {post.comments || 0}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="poem-expiry">
+                    <FiClock /> Forest whispers stay for 7 days... {daysLeft} left.
+                </div>
+            </article>
+        );
+    }
 
     // ═══════════════════════════════════════════
     // CONFESSION CARD - Special heartfelt design
@@ -123,7 +195,7 @@ export default function PostCard({ post, index = 0 }) {
                             <FiHeart fill="#e11d48" stroke="#e11d48" size={20} />
                         </div>
                         <h2 className="confession-title-text">
-                            {post.title || 'Anonymous\nConfession'}
+                            {post.title || 'With All\nMy Heart'}
                         </h2>
                         {hasMedia && (
                             <div className="confession-media-frame">
@@ -147,7 +219,7 @@ export default function PostCard({ post, index = 0 }) {
                     {/* Right Side - Letter Content */}
                     <div className="confession-right">
                         <div className="confession-letter-header">
-                            <span className="confession-to">TO WHOM IT MAY CONCERN,</span>
+                            <span className="confession-to">TO MY DEAREST,</span>
                             <span className="confession-date">Posted on {dateStr}</span>
                         </div>
 
@@ -155,7 +227,6 @@ export default function PostCard({ post, index = 0 }) {
                             <span className="confession-quote-mark open">"</span>
                             <p className="confession-content" style={{
                                 fontWeight: (post.textStyle === 'bold' || post.isBold) ? 700 : 400,
-                                fontStyle: post.textStyle === 'italic' ? 'italic' : 'normal'
                             }}>
                                 {post.content}
                             </p>
@@ -167,17 +238,21 @@ export default function PostCard({ post, index = 0 }) {
                                 <span className="confession-signed-label">SIGNED WITH LOVE</span>
                                 <div className="confession-author">
                                     <div className="confession-author-avatar">
-                                        <FiHeart fill="#fda4af" stroke="none" size={14} />
+                                        <FiHeart fill="#e11d48" stroke="none" size={18} />
                                     </div>
                                     <span>{post.authorName || 'Your Secret Admirer'}</span>
                                 </div>
                             </div>
                             <div className="confession-right-actions">
-                                <button className="confession-action-btn small" onClick={() => navigate(`/post/${post.id}`)}>
-                                    <FiMessageSquare /> {post.comments || 0}
+                                <button className="confession-view-btn" onClick={() => navigate(`/post/${post.id}`)}>
+                                    <FiMessageSquare />
+                                    <div style={{ textAlign: 'left' }}>
+                                        <span>VIEW</span>
+                                        <div>Confession</div>
+                                    </div>
                                 </button>
                                 {isAdmin && (
-                                    <button className="confession-action-btn small delete" onClick={async (e) => {
+                                    <button className="confession-action-btn small delete" style={{ position: 'absolute', top: '10px', right: '10px' }} onClick={async (e) => {
                                         e.stopPropagation();
                                         if (window.confirm('Admin: Delete this confession?')) {
                                             await deletePost(post.id);

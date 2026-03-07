@@ -15,6 +15,7 @@ const TAGS = [
     { id: 'real', label: 'Real', color: '#10b981' },
     { id: 'help', label: 'Help', color: '#f59e0b' },
     { id: 'opinion', label: 'Opinion', color: '#06b6d4' },
+    { id: 'poem', label: 'Poem', color: '#047857' },
 ];
 
 export default function CreatePost({ onPostSuccess, isModal = false }) {

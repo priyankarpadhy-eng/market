@@ -25,6 +25,8 @@
     flex: 1;
     min-width: 0;
     padding: 24px;
+    position: relative;
+    /* Contain absolute children like the music player */
 }
 
 @media (max-width: 768px) {

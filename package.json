@@ -7,12 +7,18 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:open": "npx cap open android",
+    "cap:copy": "npx cap copy android"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1003.0",
     "@aws-sdk/s3-presigned-post": "^3.1003.0",
     "@aws-sdk/s3-request-presigner": "^3.1003.0",
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
     "@gsap/react": "^2.1.2",
     "firebase": "^12.10.0",
     "framer-motion": "^12.35.0",

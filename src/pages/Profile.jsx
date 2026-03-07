@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { FiEdit2, FiCamera, FiCalendar, FiMapPin, FiShield, FiStar, FiZap, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserProfile, updateUserProfile, isNicknameAvailable } from '../firebase/services';
@@ -202,64 +203,117 @@ export default function Profile() {
                         <li><FiStar size={12} /> Verified admin badge on your profile</li>
                     </ul>
                     <p className="admin-cta-instruction">
-                        Fill out this quick form and we'll review your request within 24 hours:
+                        Become a verified campus anchor!
                     </p>
-                    <div className="admin-cta-form-wrap">
-                        <iframe
-                            src="https://docs.google.com/forms/d/e/1FAIpQLSdEDJrgE0DNYxWlr7E0Jc0xw480HjD2zscFHElwk3G-GVpDDw/viewform?embedded=true"
-                            width="100%"
-                            height="720"
-                            frameBorder="0"
-                            marginHeight="0"
-                            marginWidth="0"
-                            title="Admin Access Request Form"
-                            loading="lazy"
-                        >
-                            Loading form…
-                        </iframe>
-                    </div>
+                    <button className="admin-cta-btn" onClick={() => setShowAdminModal(true)}>
+                        <FiZap size={16} /> Request Admin Access
+                    </button>
                 </div>
             )}
 
+            {createPortal(
+                <AnimatePresence>
+                    {showAdminModal && (
+                        <motion.div
+                            key="admin-modal-overlay"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="profile-modal-overlay"
+                            style={{ zIndex: 100000 }}
+                            onClick={() => setShowAdminModal(false)}
+                        >
+                            <motion.div
+                                key="admin-modal-content"
+                                initial={{ y: 50, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: 50, opacity: 0 }}
+                                className="profile-modal"
+                                style={{ maxWidth: '800px', width: '90%' }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                    <h2 style={{ marginBottom: 0 }}>Request Admin Privileges</h2>
+                                    <button onClick={() => setShowAdminModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}>✕</button>
+                                </div>
+                                <iframe
+                                    src="https://docs.google.com/forms/d/e/1FAIpQLSdEDJrgE0DNYxWlr7E0Jc0xw480HjD2zscFHElwk3G-GVpDDw/viewform?embedded=true"
+                                    width="100%"
+                                    height="720"
+                                    frameBorder="0"
+                                    marginHeight="0"
+                                    marginWidth="0"
+                                    title="Admin Access Request Form"
+                                    loading="lazy"
+                                >
+                                    Loading form…
+                                </iframe>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
 
-            {showEditModal && (
-                <div className="profile-modal-overlay" onClick={() => setShowEditModal(false)}>
-                    <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
-                        <h2>Edit Profile</h2>
-                        <div className="profile-modal-field">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <label htmlFor="edit-name">Username / Nickname</label>
-                                {nicknameStatus.message && (
-                                    <span style={{ fontSize: '0.7rem', color: nicknameStatus.available ? '#10b981' : '#ef4444', fontWeight: 700 }}>{nicknameStatus.message}</span>
-                                )}
-                            </div>
-                            <input
-                                type="text"
-                                id="edit-name"
-                                value={editForm.displayName}
-                                onChange={(e) => setEditForm(prev => ({ ...prev, displayName: e.target.value }))}
-                                style={{ borderColor: !nicknameStatus.available ? '#ef4444' : (nicknameStatus.available && editForm.displayName !== profile.displayName ? '#10b981' : 'var(--border-medium)') }}
-                            />
-                            <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px' }}>Please avoid using your real name for privacy unless absolutely necessary.</p>
-                        </div>
-                        <div className="profile-modal-field">
-                            <label htmlFor="edit-major">Major</label>
-                            <input type="text" id="edit-major" value={editForm.major} onChange={(e) => setEditForm(prev => ({ ...prev, major: e.target.value }))} />
-                        </div>
-                        <div className="profile-modal-field">
-                            <label htmlFor="edit-location">Location</label>
-                            <input type="text" id="edit-location" value={editForm.location} onChange={(e) => setEditForm(prev => ({ ...prev, location: e.target.value }))} />
-                        </div>
-                        <div className="profile-modal-field">
-                            <label htmlFor="edit-bio">Bio</label>
-                            <textarea id="edit-bio" value={editForm.bio} onChange={(e) => setEditForm(prev => ({ ...prev, bio: e.target.value }))} />
-                        </div>
-                        <div className="profile-modal-actions">
-                            <button className="profile-modal-cancel" onClick={() => setShowEditModal(false)}>Cancel</button>
-                            <button className="profile-modal-save" onClick={handleSaveProfile} id="save-profile-btn" disabled={!nicknameStatus.available || nicknameStatus.checking}>Save Changes</button>
-                        </div>
-                    </div>
-                </div>
+
+            {createPortal(
+                <AnimatePresence>
+                    {showEditModal && (
+                        <motion.div
+                            key="edit-profile-overlay"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="profile-modal-overlay"
+                            style={{ zIndex: 100000 }}
+                            onClick={() => setShowEditModal(false)}
+                        >
+                            <motion.div
+                                key="edit-profile-content"
+                                initial={{ y: 50, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: 50, opacity: 0 }}
+                                className="profile-modal"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <h2>Edit Profile</h2>
+                                <div className="profile-modal-field">
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <label htmlFor="edit-name">Username / Nickname</label>
+                                        {nicknameStatus.message && (
+                                            <span style={{ fontSize: '0.7rem', color: nicknameStatus.available ? '#10b981' : '#ef4444', fontWeight: 700 }}>{nicknameStatus.message}</span>
+                                        )}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        id="edit-name"
+                                        value={editForm.displayName}
+                                        onChange={(e) => setEditForm(prev => ({ ...prev, displayName: e.target.value }))}
+                                        style={{ borderColor: !nicknameStatus.available ? '#ef4444' : (nicknameStatus.available && editForm.displayName !== profile.displayName ? '#10b981' : 'var(--border-medium)') }}
+                                    />
+                                    <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '4px' }}>Please avoid using your real name for privacy unless absolutely necessary.</p>
+                                </div>
+                                <div className="profile-modal-field">
+                                    <label htmlFor="edit-major">Major</label>
+                                    <input type="text" id="edit-major" value={editForm.major} onChange={(e) => setEditForm(prev => ({ ...prev, major: e.target.value }))} />
+                                </div>
+                                <div className="profile-modal-field">
+                                    <label htmlFor="edit-location">Location</label>
+                                    <input type="text" id="edit-location" value={editForm.location} onChange={(e) => setEditForm(prev => ({ ...prev, location: e.target.value }))} />
+                                </div>
+                                <div className="profile-modal-field">
+                                    <label htmlFor="edit-bio">Bio</label>
+                                    <textarea id="edit-bio" value={editForm.bio} onChange={(e) => setEditForm(prev => ({ ...prev, bio: e.target.value }))} />
+                                </div>
+                                <div className="profile-modal-actions">
+                                    <button className="profile-modal-cancel" onClick={() => setShowEditModal(false)}>Cancel</button>
+                                    <button className="profile-modal-save" onClick={handleSaveProfile} id="save-profile-btn" disabled={!nicknameStatus.available || nicknameStatus.checking}>Save Changes</button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body
             )}
         </div>
     );

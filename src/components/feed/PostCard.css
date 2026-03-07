@@ -1,18 +1,20 @@
 .post-card {
     background: var(--bg-white);
-    border: 1px solid var(--border-light);
-    border-radius: 12px;
+    border: 2px solid var(--border-medium);
+    border-radius: 16px;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     font-family: 'Inter', -apple-system, sans-serif;
-    transition: box-shadow 0.2s;
-    animation: fadeIn 0.4s ease forwards;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 1;
+    box-shadow: var(--shadow-sm);
 }
 
 .post-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md), 0 0 0 1px var(--primary-light);
+    border-color: var(--primary);
 }
 
 .post-card.modal-active {
@@ -24,166 +26,105 @@
 /* ── CONFESSION LETTER CARD ───────────────────────────── */
 /* ═══════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════ */
+/* ── CONFESSION LETTER CARD ───────────────────────────── */
+/* ═══════════════════════════════════════════════════════ */
+
 .confession-letter-card {
-    background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 30%, #fff 70%);
-    border: 1px solid #fecdd3;
-    border-radius: 16px;
+    background: #fefae0;
+    /* Vintage Cream */
+    border: 1px solid #e9edc9;
+    border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     position: relative;
-    animation: fadeIn 0.4s ease forwards;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(136, 19, 55, 0.08);
+}
+
+.confession-letter-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(136, 19, 55, 0.12);
 }
 
 .confession-bg-hearts {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     pointer-events: none;
-    overflow: hidden;
     z-index: 0;
+    overflow: hidden;
+    opacity: 0.1;
 }
 
 .confession-bg-hearts span {
     position: absolute;
     font-size: 1.2rem;
     color: #fda4af;
-    opacity: 0.08;
     animation: floatHeart 6s ease-in-out infinite;
 }
 
-.confession-bg-hearts span:nth-child(1) {
-    top: 10%;
-    left: 5%;
-    animation-delay: 0s;
-    font-size: 1.5rem;
-}
-
-.confession-bg-hearts span:nth-child(2) {
-    top: 60%;
-    left: 15%;
-    animation-delay: 1s;
-    font-size: 1rem;
-}
-
-.confession-bg-hearts span:nth-child(3) {
-    top: 30%;
-    right: 10%;
-    animation-delay: 2s;
-    font-size: 2rem;
-}
-
-.confession-bg-hearts span:nth-child(4) {
-    bottom: 20%;
-    right: 25%;
-    animation-delay: 0.5s;
-    font-size: 1.2rem;
-}
-
-.confession-bg-hearts span:nth-child(5) {
-    top: 80%;
-    left: 40%;
-    animation-delay: 3s;
-    font-size: 0.9rem;
-}
-
-.confession-bg-hearts span:nth-child(6) {
-    top: 5%;
-    right: 30%;
-    animation-delay: 1.5s;
-}
-
-.confession-bg-hearts span:nth-child(7) {
-    bottom: 40%;
-    left: 55%;
-    animation-delay: 4s;
-    font-size: 1.8rem;
-}
-
-.confession-bg-hearts span:nth-child(8) {
-    top: 45%;
-    left: 80%;
-    animation-delay: 2.5s;
-}
-
-.confession-bg-hearts span:nth-child(9) {
-    bottom: 10%;
-    right: 5%;
-    animation-delay: 3.5s;
-    font-size: 1.4rem;
-}
-
-.confession-bg-hearts span:nth-child(10) {
-    top: 15%;
-    left: 60%;
-    animation-delay: 0.8s;
-    font-size: 1.1rem;
-}
-
-@keyframes floatHeart {
-
-    0%,
-    100% {
-        transform: translateY(0) rotate(0deg);
-    }
-
-    50% {
-        transform: translateY(-12px) rotate(10deg);
-    }
-}
+/* ... floatHeart keyframes stay same ... */
 
 .confession-letter-layout {
     display: flex;
     position: relative;
     z-index: 1;
-    min-height: 260px;
+    min-height: 280px;
 }
 
+/* Left Side - Pink */
 .confession-left {
     flex: 0 0 200px;
-    background: linear-gradient(160deg, #ffe4e6, #fecdd3);
-    padding: 24px 20px;
+    background: #fde2e4;
+    /* Soft Pink */
+    padding: 24px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 16px;
     position: relative;
+    border-right: 1px solid rgba(136, 19, 55, 0.05);
 }
 
 .confession-heart-badge {
-    width: 44px;
-    height: 44px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: rotate(5deg);
-    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.15);
+    position: absolute;
+    top: 24px;
+    right: 12px;
+    opacity: 0.3;
 }
 
 .confession-title-text {
     font-family: 'Georgia', serif;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     font-weight: 700;
     font-style: italic;
     color: #881337;
-    text-align: center;
-    line-height: 1.3;
+    text-align: left;
+    line-height: 0.9;
     margin: 0;
-    white-space: pre-line;
+    letter-spacing: -1px;
+    width: 100%;
+}
+
+.confession-title-text::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: #881337;
+    opacity: 0.2;
+    margin-top: 10px;
 }
 
 .confession-media-frame {
-    width: 150px;
-    height: 150px;
-    border-radius: 12px;
-    overflow: hidden;
+    width: 140px;
+    height: 140px;
+    background: white;
+    padding: 8px 8px 20px 8px;
     transform: rotate(-3deg);
-    border: 4px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 6px 20px rgba(136, 19, 55, 0.15);
-    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    margin: 5px 0;
+    border-radius: 4px;
 }
 
 .confession-media {
@@ -196,156 +137,190 @@
 .confession-left-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     margin-top: auto;
+    width: 100%;
+    justify-content: flex-start;
 }
 
 .confession-action-btn {
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 6px 12px;
+    gap: 6px;
+    padding: 8px 14px;
     border-radius: 20px;
-    border: none;
-    background: rgba(255, 255, 255, 0.6);
+    background: transparent;
     color: #881337;
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: none;
     cursor: pointer;
     transition: all 0.2s;
-    backdrop-filter: blur(4px);
 }
 
 .confession-action-btn:hover {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(136, 19, 55, 0.05);
 }
 
-.confession-action-btn.active {
-    background: #e11d48;
-    color: white;
-}
-
-.confession-action-btn.small {
-    padding: 5px 10px;
-    font-size: 0.78rem;
-}
-
-.confession-action-btn.delete:hover {
-    background: #fee2e2;
-    color: #dc2626;
-}
-
-/* Right Side - Letter */
+/* Right Side - Cream */
 .confession-right {
     flex: 1;
     padding: 24px 28px;
     display: flex;
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.5);
-    border-left: 1px dashed #fda4af;
-    position: relative;
+    background: transparent;
 }
 
 .confession-letter-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 16px;
 }
 
 .confession-to {
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-size: 0.75rem;
+    font-weight: 800;
     letter-spacing: 1.5px;
-    color: #e11d48;
+    color: #be123c;
     text-transform: uppercase;
+    border-bottom: 2px solid rgba(190, 18, 60, 0.1);
+    padding-bottom: 2px;
 }
 
 .confession-date {
-    font-size: 0.72rem;
-    color: #f9a8d4;
+    font-size: 0.75rem;
+    color: #948b8b;
     font-style: italic;
+    font-family: 'Georgia', serif;
 }
 
 .confession-letter-body {
     flex: 1;
     position: relative;
-    padding: 16px 20px;
-    border: 1px solid #fecdd3;
+    padding: 24px;
+    border: 1px solid rgba(190, 18, 60, 0.05);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.6);
-    min-height: 100px;
-}
-
-.confession-quote-mark {
-    font-family: 'Georgia', serif;
-    font-size: 2.5rem;
-    color: #fda4af;
-    line-height: 1;
-    position: absolute;
-}
-
-.confession-quote-mark.open {
-    top: 4px;
-    left: 8px;
-}
-
-.confession-quote-mark.close {
-    bottom: 4px;
-    right: 12px;
-}
-
-.confession-content {
-    font-family: 'Georgia', serif;
-    font-size: 0.95rem;
-    color: #881337;
-    line-height: 1.7;
-    margin: 0;
-    padding: 8px 20px 8px 16px;
-    font-style: italic;
-}
-
-.confession-letter-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px dashed #fecdd3;
-}
-
-.confession-signed-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #e11d48;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 4px;
-}
-
-.confession-author {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #881337;
-}
-
-.confession-author-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #ffe4e6;
+    background: rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.confession-right-actions {
+.confession-quote-mark {
+    font-family: 'Georgia', serif;
+    font-size: 2.8rem;
+    color: #fecaca;
+    line-height: 1;
+    position: absolute;
+}
+
+.confession-quote-mark.open {
+    top: 8px;
+    left: 12px;
+}
+
+.confession-quote-mark.close {
+    bottom: 8px;
+    right: 12px;
+}
+
+.confession-content {
+    font-family: 'Georgia', serif;
+    font-size: 1.15rem;
+    color: #4b4b4b;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+    opacity: 0.85;
+}
+
+.confession-letter-footer {
     display: flex;
-    gap: 6px;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+.confession-signed-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.confession-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Georgia', serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    color: #881337;
+}
+
+.confession-author-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+}
+
+.confession-view-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(to right, #e11d48, #be123c);
+    color: white;
+    border-radius: 40px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    box-shadow: 0 6px 15px rgba(225, 29, 72, 0.2);
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.confession-view-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(225, 29, 72, 0.35);
+}
+
+.confession-view-btn svg {
+    font-size: 1rem;
+}
+
+.confession-view-btn span {
+    font-size: 0.55rem;
+    display: block;
+    opacity: 0.8;
+    margin-bottom: -1px;
+}
+
+@media (max-width: 900px) {
+    .confession-letter-layout {
+        flex-direction: column;
+    }
+
+    .confession-left {
+        flex: none;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .confession-right {
+        padding: 24px;
+    }
 }
 
 .confession-expiry {
@@ -392,9 +367,16 @@
 
 .freelance-card {
     background: linear-gradient(135deg, #fff5f5 0%, #fff 40%, #fff 100%);
-    border: 1px solid #fecaca;
+    border: 2px solid #fecaca;
+    border-radius: 16px;
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.freelance-card:hover {
+    border-color: #ef4444;
+    box-shadow: 0 12px 24px -10px rgba(239, 68, 68, 0.15);
 }
 
 .freelance-bg-money {
@@ -493,9 +475,16 @@
 
 .discussion-card {
     background: linear-gradient(135deg, #f0fdf4 0%, #fff 40%, #fff 100%);
-    border: 1px solid #bbf7d0;
+    border: 2px solid #bbf7d0;
+    border-radius: 16px;
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.discussion-card:hover {
+    border-color: #22c55e;
+    box-shadow: 0 12px 24px -10px rgba(34, 197, 94, 0.15);
 }
 
 .discussion-bg-emojis {
@@ -954,9 +943,30 @@
     .discussion-card {
         border-left: none;
         border-right: none;
+        border-top: 3px solid var(--border-medium);
+        border-bottom: 3px solid var(--border-medium);
         border-radius: 0;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         box-shadow: none;
+    }
+
+    .confession-letter-card {
+        border-color: #fda4af;
+    }
+
+    .freelance-card {
+        border-color: #fecaca;
+    }
+
+    .discussion-card {
+        border-color: #bbf7d0;
+    }
+
+    .post-card:hover,
+    .confession-letter-card:hover,
+    .freelance-card:hover,
+    .discussion-card:hover {
+        transform: none;
     }
 
     .post-header {
@@ -986,4 +996,217 @@
     .confession-letter-body {
         padding: 12px 16px;
     }
+}@media (min-width: 0px) {
+
+/* ------------------------------------------------------- */
+/* -- POEM FOREST CARD ----------------------------------- */
+/* ------------------------------------------------------- */
+
+.poem-forest-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #86efac;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(20, 83, 45, 0.05);
+}
+
+.poem-forest-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(20, 83, 45, 0.1);
+}
+
+.poem-bg-leaves {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0.15;
+}
+
+.poem-bg-leaves span {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: leafFloat 8s ease-in-out infinite;
+}
+
+@keyframes leafFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(10px, -15px) rotate(15deg); }
+    66% { transform: translate(-5px, -10px) rotate(-10deg); }
+}
+
+.poem-layout {
+    display: flex;
+    position: relative;
+    z-index: 1;
+}
+
+/* Left - Forest Gradient */
+.poem-left {
+    flex: 0 0 200px;
+    background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.poem-mountain-icon {
+    font-size: 2.5rem;
+    color: #34d399;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+}
+
+.poem-title {
+    font-family: 'Georgia', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    color: #ecfdf5;
+}
+
+.poem-divider {
+    width: 40px;
+    height: 3px;
+    background: #10b981;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.poem-media-frame {
+    width: 140px;
+    height: 140px;
+    border-radius: 15px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Right - Paper Theme */
+.poem-right {
+    flex: 1;
+    background: #fff;
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    border-left: 8px solid #065f46;
+}
+
+.poem-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    border-bottom: 1px dashed #d1fae5;
+    padding-bottom: 10px;
+}
+
+.poem-tag-label {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #047857;
+    letter-spacing: 2px;
+}
+
+.poem-date {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-family: 'Georgia', serif;
+}
+
+.poem-body {
+    flex: 1;
+    position: relative;
+    padding: 10px 0;
+}
+
+.poem-quote {
+    font-size: 3rem;
+    color: #d1fae5;
+    position: absolute !important;
+    font-family: 'Georgia', serif;
+    line-height: 1;
+}
+
+.poem-content {
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #064e3b;
+    font-style: italic;
+    white-space: pre-wrap;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.poem-footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.poem-author-box {
+    text-align: left;
+}
+
+.poem-author-label {
+    font-size: 0.6rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.poem-author-name {
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    color: #064e3b;
+    font-weight: 700;
+}
+
+.poem-action-btn {
+    background: #064e3b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(6, 78, 59, 0.2);
+    transition: all 0.2s;
+}
+
+.poem-action-btn:hover {
+    background: #065f46;
+    transform: scale(1.05);
+}
+
+.poem-expiry {
+    background: #064e3b;
+    color: #ecfdf5;
+    font-size: 0.7rem;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .poem-layout { flex-direction: column; }
+    .poem-left { flex: none; width: 100%; border-right: none; }
+    .poem-right { border-left: none; border-top: 6px solid #065f46; padding: 24px; }
+}
+
 }
