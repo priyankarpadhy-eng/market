@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { FiSearch, FiBell, FiMessageSquare, FiPlus, FiUser, FiShoppingBag, FiLayers, FiImage, FiX } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import { globalSearch } from '../../firebase/services';
+import CreatePost from '../feed/CreatePost';
+import { motion, AnimatePresence } from 'framer-motion';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -12,6 +14,7 @@ export default function Navbar() {
     const [results, setResults] = useState([]);
     const [searching, setSearching] = useState(false);
     const [showResults, setShowResults] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
 
     const searchRef = useRef(null);
 
@@ -109,6 +112,14 @@ export default function Navbar() {
             </div>
 
             <div className="navbar-actions">
+                <button
+                    className="navbar-action-btn create-btn"
+                    id="navbar-create-btn"
+                    title="Create Post"
+                    onClick={() => setShowCreateModal(true)}
+                >
+                    <FiPlus />
+                </button>
                 <button className="navbar-action-btn" id="notifications-btn" title="Notifications">
                     <FiBell />
                     <span className="navbar-notification-dot"></span>
@@ -132,6 +143,44 @@ export default function Navbar() {
             </div>
 
 
+            <AnimatePresence>
+                {showCreateModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="profile-modal-overlay"
+                        style={{ zIndex: 9999 }}
+                        onClick={() => setShowCreateModal(false)}
+                    >
+                        <motion.div
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 50, opacity: 0 }}
+                            className="profile-modal"
+                            style={{
+                                maxWidth: '600px',
+                                padding: '24px',
+                                maxHeight: '85vh',
+                                overflowY: 'auto'
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Create New Post</h2>
+                                <button
+                                    onClick={() => setShowCreateModal(false)}
+                                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-secondary)' }}
+                                >
+                                    <FiX />
+                                </button>
+                            </div>
+
+                            <CreatePost onPostSuccess={() => setShowCreateModal(false)} isModal={true} />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </nav>
     );
 }

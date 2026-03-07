@@ -181,9 +181,17 @@
         gap: 4px;
     }
 
-    .navbar-action-btn:not(#messages-btn) {
+    .navbar-action-btn:not(#messages-btn):not(.create-btn) {
         display: none;
-        /* Keep messages and profile avatar */
+        /* Keep messages, create btn and profile avatar */
+    }
+
+    .navbar-action-btn.create-btn {
+        display: flex;
+        /* Force show create button */
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
     }
 }
 
