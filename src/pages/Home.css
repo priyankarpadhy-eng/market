@@ -106,8 +106,8 @@
 
 @media (max-width: 640px) {
     .fab-create-btn {
-        bottom: 90px;
-        /* Stay clearly above bottom nav */
+        bottom: 120px;
+        /* Increased spacing to clear bottom nav and music player */
         right: 16px;
         width: 54px;
         height: 54px;
