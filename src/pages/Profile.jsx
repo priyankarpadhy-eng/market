@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FiEdit2, FiCamera, FiCalendar, FiMapPin, FiShield, FiStar, FiZap, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserProfile, updateUserProfile, isNicknameAvailable } from '../firebase/services';
@@ -21,6 +22,7 @@ export default function Profile() {
     });
 
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showAdminModal, setShowAdminModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [editForm, setEditForm] = useState({
         displayName: '',

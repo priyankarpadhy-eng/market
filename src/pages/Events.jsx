@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { subscribeToEvents } from '../firebase/services';
-import { FiCalendar, FiMapPin, FiClock, FiExternalLink, FiTag, FiSearch, FiPlus } from 'react-icons/fi';
+import { FiCalendar, FiMapPin, FiClock, FiExternalLink, FiTag, FiSearch, FiPlus, FiStar } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import './Events.css';
