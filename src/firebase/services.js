@@ -84,7 +84,7 @@ export async function createPost(postData) {
     }
 
     // Validate tags
-    const validTags = ['confession', 'truth', 'spill', 'shit', 'real', 'help', 'opinion', 'freelancing', 'discussion'];
+    const validTags = ['confession', 'truth', 'spill', 'shit', 'real', 'help', 'opinion', 'freelancing', 'discussion', 'poetic'];
     if (!postData.tag || !validTags.includes(postData.tag)) {
         throw new Error(`Invalid tag: "${postData.tag}". A valid tag is compulsory.`);
     }

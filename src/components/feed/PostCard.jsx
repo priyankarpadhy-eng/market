@@ -87,7 +87,7 @@ export default function PostCard({ post, index = 0 }) {
     const daysOld = Math.floor((now - pTime) / (1000 * 60 * 60 * 24));
     const daysLeft = Math.max(0, 7 - daysOld);
     const isConfession = post.tag && post.tag.toLowerCase() === 'confession';
-    const isPoem = post.tag && post.tag.toLowerCase() === 'poem';
+    const isPoem = post.tag && post.tag.toLowerCase() === 'poetic';
     const isFreelancing = post.tag && post.tag.toLowerCase() === 'freelancing';
     const isDiscussion = post.tag && post.tag.toLowerCase() === 'discussion';
     const isImmortal = votes >= 50;
