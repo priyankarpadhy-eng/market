@@ -169,7 +169,7 @@ export default function PostCard({ post, index = 0 }) {
                 </div>
 
                 <div className="poem-expiry">
-                    <FiClock /> Forest whispers stay for 7 days... {daysLeft} left.
+                    <FiClock /> Expires in {daysLeft} day{daysLeft !== 1 ? 's' : ''}
                 </div>
             </article>
         );
