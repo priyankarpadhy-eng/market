@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { createPost } from '../../firebase/services';
 import { uploadFile } from '../../lib/storage';
-import { motion } from 'framer-motion';
-import { FiSend, FiTag, FiUser, FiHelpCircle, FiImage, FiVideo, FiX } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import { FiSend, FiTag, FiUser, FiHelpCircle, FiImage, FiVideo, FiX, FiCheck, FiMaximize } from 'react-icons/fi';
 import './CreatePost.css';
 
 const TAGS = [
@@ -32,6 +34,12 @@ export default function CreatePost({ onPostSuccess, isModal = false }) {
     const [mediaFile, setMediaFile] = useState(null);
     const [mediaPreview, setMediaPreview] = useState(null);
     const [uploadProgress, setUploadProgress] = useState(0);
+
+    // Cropping States
+    const [showCropper, setShowCropper] = useState(false);
+    const [crop, setCrop] = useState();
+    const [completedCrop, setCompletedCrop] = useState(null);
+    const [imgRef, setImgRef] = useState(null);
 
     // If not logged in, only confession is allowed
     const availableTags = currentUser ? TAGS : TAGS.filter(t => t.id === 'confession');
@@ -92,24 +100,78 @@ export default function CreatePost({ onPostSuccess, isModal = false }) {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Validation limits: strictly 50MB for any file
-        const isVideo = file.type.startsWith('video/');
         const maxSize = 50 * 1024 * 1024;
-
         if (file.size > maxSize) {
             setError(`File too large. Maximum size is 50MB limit.`);
             return;
         }
 
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            setMediaPreview(reader.result);
+            if (file.type.startsWith('image/')) {
+                setShowCropper(true);
+            }
+        });
+        reader.readAsDataURL(file);
         setMediaFile(file);
-        setMediaPreview(URL.createObjectURL(file));
         setError('');
+    };
+
+    const onImageLoad = (e) => {
+        const { width, height } = e.currentTarget;
+        const crop = centerCrop(
+            makeAspectCrop({ unit: '%', width: 90 }, 3 / 2, width, height),
+            width,
+            height
+        );
+        setCrop(crop);
+        setImgRef(e.currentTarget);
+    };
+
+    const getCroppedImg = async () => {
+        if (!completedCrop || !imgRef) return;
+
+        const canvas = document.createElement('canvas');
+        const scaleX = imgRef.naturalWidth / imgRef.width;
+        const scaleY = imgRef.naturalHeight / imgRef.height;
+        canvas.width = completedCrop.width;
+        canvas.height = completedCrop.height;
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(
+            imgRef,
+            completedCrop.x * scaleX,
+            completedCrop.y * scaleY,
+            completedCrop.width * scaleX,
+            completedCrop.height * scaleY,
+            0,
+            0,
+            completedCrop.width,
+            completedCrop.height
+        );
+
+        return new Promise((resolve) => {
+            canvas.toBlob((blob) => {
+                if (!blob) return;
+                const file = new File([blob], 'cropped.jpg', { type: 'image/jpeg' });
+                resolve({ file, url: URL.createObjectURL(blob) });
+            }, 'image/jpeg');
+        });
+    };
+
+    const handleSaveCrop = async () => {
+        const { file, url } = await getCroppedImg();
+        setMediaFile(file);
+        setMediaPreview(url);
+        setShowCropper(false);
     };
 
     const clearMedia = () => {
         setMediaFile(null);
         setMediaPreview(null);
         setUploadProgress(0);
+        setShowCropper(false);
     };
 
     return (
@@ -135,15 +197,68 @@ export default function CreatePost({ onPostSuccess, isModal = false }) {
                     rows="3"
                 />
 
-                {mediaPreview && (
-                    <div className="media-preview-container" style={{ position: 'relative', marginTop: '12px', borderRadius: '12px', overflow: 'hidden' }}>
-                        <button type="button" onClick={clearMedia} style={{ position: 'absolute', top: '8px', right: '8px', zIndex: 10, background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <AnimatePresence>
+                    {showCropper && mediaPreview && !mediaFile?.type?.startsWith('video/') && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="cropper-modal-overlay"
+                            style={{ position: 'fixed', inset: 0, zIndex: 3000, background: 'rgba(0,0,0,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+                        >
+                            <div className="cropper-card" style={{ background: '#fff', borderRadius: '24px', width: '100%', maxWidth: '550px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}>
+                                <div style={{ padding: '20px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Resize & Position</h3>
+                                    <button type="button" onClick={() => setShowCropper(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><FiX /></button>
+                                </div>
+                                <div style={{ padding: '20px', maxHeight: '60vh', overflowY: 'auto', display: 'flex', justifyContent: 'center', background: '#0f172a' }}>
+                                    <ReactCrop
+                                        crop={crop}
+                                        onChange={(c) => setCrop(c)}
+                                        onComplete={(c) => setCompletedCrop(c)}
+                                        aspect={selectedTag === 'poetic' ? 3 / 2 : undefined}
+                                        circularCrop={false}
+                                    >
+                                        <img src={mediaPreview} onLoad={onImageLoad} style={{ maxWidth: '100%', display: 'block' }} alt="Crop target" />
+                                    </ReactCrop>
+                                </div>
+                                <div style={{ padding: '20px', background: '#fff', borderTop: '1px solid #eee', display: 'flex', gap: '12px' }}>
+                                    <button type="button" onClick={() => setShowCropper(false)} style={{ flex: 1, padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fff', fontWeight: 600, color: '#64748b', cursor: 'pointer' }}>Cancel</button>
+                                    <button type="button" onClick={handleSaveCrop} style={{ flex: 1, padding: '14px', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: '#fff', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                        <FiCheck /> Done
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {mediaPreview && !showCropper && (
+                    <div className="media-preview-container" style={{
+                        position: 'relative',
+                        marginTop: '12px',
+                        borderRadius: '16px',
+                        overflow: 'hidden',
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0'
+                    }}>
+                        <button type="button" onClick={clearMedia} style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10, background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', backdropFilter: 'blur(4px)' }}>
                             <FiX />
                         </button>
+
                         {mediaFile?.type?.startsWith('video/') ? (
                             <video src={mediaPreview} controls style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', background: '#000' }} />
                         ) : (
-                            <img src={mediaPreview} alt="Preview" style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
+                            <div className="preview-image-wrap" style={{ position: 'relative' }}>
+                                <img src={mediaPreview} alt="Preview" style={{ width: '100%', maxHeight: '450px', objectFit: 'contain', display: 'block' }} />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowCropper(true)}
+                                    style={{ position: 'absolute', bottom: '12px', right: '12px', background: 'rgba(255,255,255,0.95)', border: 'none', padding: '10px 18px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 8px 20px rgba(0,0,0,0.1)', color: 'var(--primary)' }}
+                                >
+                                    <FiMaximize /> Resize
+                                </button>
+                            </div>
                         )}
                         {uploadProgress > 0 && uploadProgress < 100 && (
                             <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '4px', background: 'rgba(255,255,255,0.3)' }}>

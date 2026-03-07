@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare2, FiBookmark, FiDownload, FiFile, FiClock, FiShield, FiTrash2, FiMoreHorizontal, FiHeart, FiFlag, FiX, FiBriefcase, FiDollarSign, FiPhoneCall, FiFeather, FiMap } from 'react-icons/fi';
+import { motion, useMotionValue, useTransform, useMotionTemplate, useSpring } from 'framer-motion';
 import { votePost, deletePost, reportPost } from '../../firebase/services';
 import { useAuth } from '../../contexts/AuthContext';
 import './PostCard.css';
@@ -12,6 +13,31 @@ export default function PostCard({ post, index = 0 }) {
     const navigate = useNavigate();
     const { isAdmin, currentUser } = useAuth();
     const [showReportModal, setShowReportModal] = useState(false);
+
+    // Parallax logic
+    const x = useMotionValue(300);
+    const y = useMotionValue(200);
+
+    // Fluid spring physics - Ultra gentle
+    const springConfig = { damping: 40, stiffness: 40, mass: 1.5 };
+    const springX = useSpring(x, springConfig);
+    const springY = useSpring(y, springConfig);
+
+    const rotateX = useTransform(springY, [0, 600], [12, -12]);
+    const rotateY = useTransform(springX, [0, 1000], [-12, 12]);
+
+    const handleMouseMove = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        x.set(e.clientX - rect.left);
+        y.set(e.clientY - rect.top);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(300); // Reset to center
+        y.set(200);
+    };
+
+    const glareBg = useMotionTemplate`radial-gradient(circle at ${springX}px ${springY}px, rgba(255,255,255,0.25) 0%, transparent 70%)`;
     const [reportReason, setReportReason] = useState('');
     const [reported, setReported] = useState(false);
     const [reportLoading, setReportLoading] = useState(false);
@@ -109,70 +135,83 @@ export default function PostCard({ post, index = 0 }) {
     // ═══════════════════════════════════════════
     if (isPoem) {
         const hasMedia = post.image || post.video;
+        const bgImage = post.image || '/images/poetic_lush_bg.png'; // Fallback
+
         return (
-            <article className="poem-forest-card" style={{ animationDelay: `${index * 0.08}s` }}>
-                <div className="poem-bg-leaves">
-                    <span>🍃</span><span>🌿</span><span>🍃</span><span>🍂</span><span>🌱</span>
-                </div>
+            <div className="poetic-3d-wrap" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+                <article
+                    className="poetic-3d-card"
+                    style={{
+                        animationDelay: `${index * 0.08}s`
+                    }}
+                >
+                    {/* The Moving Background Layer (Now only this tilts) */}
+                    <motion.div
+                        className="poetic-parallax-bg"
+                        style={{
+                            rotateX,
+                            rotateY,
+                            transformStyle: "preserve-3d"
+                        }}
+                    >
+                        <img src={bgImage} alt="" />
+                        <div className="poetic-bg-overlay"></div>
+                    </motion.div>
 
-                <div className="poem-layout">
-                    {/* Left Side - Mountain/Forest Accent */}
-                    <div className="poem-left">
-                        <div className="poem-mountain-icon">
-                            <FiMap />
+                    {/* Glare effect */}
+                    <motion.div
+                        className="poetic-glare"
+                        style={{
+                            background: glareBg
+                        }}
+                    />
+
+                    {/* Static Content Layer */}
+                    <div className="poetic-3d-content">
+                        <div className="poetic-3d-header">
+                            <span className="poetic-3d-tag"><FiFeather /> Poetic</span>
+                            <span className="poetic-3d-date">{dateStr}</span>
                         </div>
-                        <h2 className="poem-title">{post.title || 'Soul of\nThe Woods'}</h2>
-                        <div className="poem-divider"></div>
 
-                        {hasMedia && (
-                            <div className="poem-media-frame">
-                                {post.video ? (
-                                    <video src={post.video} controls className="confession-media" />
-                                ) : (
-                                    <img src={post.image} alt="poem" className="confession-media" loading="lazy" />
-                                )}
+                        <div className="poetic-3d-main">
+                            <div className="poetic-glass-panel">
+                                <div className="poetic-3d-quotes">“</div>
+                                <p className="poetic-3d-text">{post.content}</p>
+                                <div className="poetic-3d-quotes bottom">”</div>
                             </div>
-                        )}
 
-                        <div className="confession-left-actions" style={{ marginTop: 'auto', color: 'white' }}>
-                            <button className="confession-action-btn" style={{ color: 'white' }} onClick={() => handleVote(1)}>
-                                <FiArrowUp /> {formatVotes(votes)}
-                            </button>
-                            <button className="confession-action-btn" style={{ color: 'white' }} onClick={handleShare}>
-                                <FiShare2 />
-                            </button>
+                            {post.video && (
+                                <div className="poetic-3d-video-wrap">
+                                    <video src={post.video} controls />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="poetic-3d-footer">
+                            <div className="poetic-3d-author">
+                                <span className="label">composed by</span>
+                                <span className="val">{post.authorName || 'Anonymous Bard'}</span>
+                            </div>
+
+                            <div className="poetic-3d-actions">
+                                <button className={`poetic-3d-btn ${userVote === 1 ? 'upvoted' : ''}`} onClick={() => handleVote(1)}>
+                                    <FiArrowUp /> {formatVotes(votes)}
+                                </button>
+                                <button className="poetic-3d-btn" onClick={() => navigate(`/post/${post.id}`)}>
+                                    <FiMessageSquare /> {post.comments || 0}
+                                </button>
+                                <button className="poetic-3d-btn" onClick={handleShare}>
+                                    <FiShare2 />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Right Side - Paper Content */}
-                    <div className="poem-right">
-                        <div className="poem-header">
-                            <span className="poem-tag-label">LITERARY POEM</span>
-                            <span className="poem-date">Dated: {dateStr}</span>
-                        </div>
-
-                        <div className="poem-body">
-                            <FiFeather className="poem-quote" style={{ opacity: 0.2, top: 0, left: 0 }} />
-                            <p className="poem-content">{post.content}</p>
-                            <img src="/images/poetic_accent.png" alt="" className="poem-floral-accent" />
-                        </div>
-
-                        <div className="poem-footer">
-                            <div className="poem-author-box">
-                                <span className="poem-author-label">WRITTEN WITH SOUL</span>
-                                <div className="poem-author-name">~ {post.authorName || 'Anonymous Bard'}</div>
-                            </div>
-                            <button className="poem-action-btn" onClick={() => navigate(`/post/${post.id}`)}>
-                                <FiMessageSquare /> {post.comments || 0}
-                            </button>
-                        </div>
+                    <div className="poetic-3d-bottom-tag">
+                        <FiClock /> Whispers fade in {daysLeft} days
                     </div>
-                </div>
-
-                <div className="poem-expiry">
-                    <FiClock /> Expires in {daysLeft} day{daysLeft !== 1 ? 's' : ''}
-                </div>
-            </article>
+                </article>
+            </div>
         );
     }
 
