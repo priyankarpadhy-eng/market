@@ -154,6 +154,7 @@ export default function PostCard({ post, index = 0 }) {
                         <div className="poem-body">
                             <FiFeather className="poem-quote" style={{ opacity: 0.2, top: 0, left: 0 }} />
                             <p className="poem-content">{post.content}</p>
+                            <img src="/images/poetic_accent.png" alt="" className="poem-floral-accent" />
                         </div>
 
                         <div className="poem-footer">
