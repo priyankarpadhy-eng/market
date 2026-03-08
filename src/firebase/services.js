@@ -416,10 +416,10 @@ export async function updateUserProfile(userId, data) {
         }
     }
 
-    await updateDoc(doc(db, 'users', userId), {
+    await setDoc(doc(db, 'users', userId), {
         ...data,
         updatedAt: serverTimestamp(),
-    });
+    }, { merge: true });
 }
 
 /**
@@ -721,5 +721,153 @@ export async function searchUserByEmail(email) {
 }
 
 export async function setUserRole(uid, role) {
-    await updateDoc(doc(db, 'users', uid), { role });
+    await setDoc(doc(db, 'users', uid), { role }, { merge: true });
+}
+
+// ═══════════════════════════════════════════
+// ─── RIDE SYSTEM ──────────────────────────
+// ═══════════════════════════════════════════
+const ridesRef = collection(db, 'rides');
+
+export function subscribeToRides(callback) {
+    const q = query(ridesRef, orderBy('departureTime', 'asc'));
+    return onSnapshot(q, (snapshot) => {
+        const now = new Date();
+        const rides = snapshot.docs
+            .map(d => {
+                const data = d.data();
+                // Handle both Timestamps and ISO strings
+                let departureTime = data.departureTime;
+                if (departureTime && departureTime.toDate) {
+                    departureTime = departureTime.toDate();
+                } else if (typeof departureTime === 'string') {
+                    departureTime = new Date(departureTime);
+                }
+
+                return {
+                    id: d.id,
+                    ...data,
+                    departureTime // normalized to Date object
+                };
+            })
+            .filter(r => {
+                if (!r.departureTime) return true;
+                return (now.getTime() - r.departureTime.getTime()) < (2 * 60 * 60 * 1000);
+            });
+        callback(rides);
+    });
+}
+
+export async function createRide(rideData) {
+    if (rideData.organizerRole === 'shop') {
+        throw new Error('Commercial accounts cannot organize rides.');
+    }
+
+    const docRef = await addDoc(ridesRef, {
+        ...rideData,
+        participantIds: [rideData.organizerId],
+        seatsTaken: 1,
+        status: 'active',
+        createdAt: serverTimestamp(),
+    });
+
+    // Add organizer to sub-collection for consistency with screenshot
+    await setDoc(doc(db, 'rides', docRef.id, 'participants', rideData.organizerId), {
+        uid: rideData.organizerId,
+        name: rideData.organizerName,
+        avatar: rideData.organizerAvatar,
+        gender: rideData.organizerGender || 'Unknown',
+        phone: rideData.organizerPhone, // Store phone number
+        joinedAt: serverTimestamp()
+    });
+
+    return docRef;
+}
+
+export async function joinRide(rideId, userData) {
+    const rideDoc = doc(db, 'rides', rideId);
+    const snap = await getDoc(rideDoc);
+
+    if (!snap.exists()) throw new Error('Ride not found');
+    const ride = snap.data();
+
+    if (ride.seatsTaken >= (ride.seatsTotal || ride.totalSeats)) {
+        throw new Error('This ride is full.');
+    }
+
+    if (ride.participantIds?.includes(userData.uid)) {
+        throw new Error('You are already part of this ride.');
+    }
+
+    // Normalized Gender check
+    const pref = (ride.genderPreference || 'mixed').toLowerCase();
+    const userGender = (userData.gender || '').toLowerCase();
+
+    if (pref !== 'mixed' && pref !== 'all' && pref !== userGender) {
+        throw new Error(`This ride is for ${ride.genderPreference} students only.`);
+    }
+
+    // Add to participants sub-collection
+    await setDoc(doc(db, 'rides', rideId, 'participants', userData.uid), {
+        uid: userData.uid,
+        name: userData.name,
+        avatar: userData.avatar,
+        gender: userData.gender,
+        phone: userData.phone, // Store phone number
+        joinedAt: serverTimestamp()
+    });
+
+    // Update root doc
+    await updateDoc(rideDoc, {
+        participantIds: arrayUnion(userData.uid),
+        seatsTaken: increment(1)
+    });
+}
+
+export async function leaveRide(rideId, userId) {
+    const rideDoc = doc(db, 'rides', rideId);
+    const snap = await getDoc(rideDoc);
+    if (!snap.exists()) return;
+    const ride = snap.data();
+
+    if (ride.organizerId === userId) {
+        throw new Error('Organizers cannot leave. Please cancel the ride instead.');
+    }
+
+    // Delete from sub-collection
+    await deleteDoc(doc(db, 'rides', rideId, 'participants', userId));
+
+    await updateDoc(rideDoc, {
+        participantIds: arrayRemove(userId),
+        seatsTaken: increment(-1)
+    });
+}
+
+export async function cancelRide(rideId) {
+    await updateDoc(doc(db, 'rides', rideId), { status: 'cancelled' });
+}
+
+// Ride Chat & Participant Services
+export function subscribeToParticipants(rideId, callback) {
+    const participantsRef = collection(db, 'rides', rideId, 'participants');
+    return onSnapshot(participantsRef, (snap) => {
+        callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+}
+
+export function subscribeToRideMessages(rideId, callback) {
+    // Messages sub-collection inside each ride document
+    const msgRef = collection(db, 'rides', rideId, 'messages');
+    const q = query(msgRef, orderBy('createdAt', 'asc'));
+    return onSnapshot(q, (snap) => {
+        callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+}
+
+export async function sendRideMessage(rideId, messageData) {
+    const msgRef = collection(db, 'rides', rideId, 'messages');
+    await addDoc(msgRef, {
+        ...messageData,
+        createdAt: serverTimestamp(),
+    });
 }

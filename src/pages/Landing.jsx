@@ -237,8 +237,6 @@ export default function Landing() {
                     </div>
                 </div>
 
-                {/* Developer card hidden for now */}
-                {/* 
                 <div style={{
                     margin: '60px auto 30px auto',
                     padding: '24px',
@@ -321,7 +319,7 @@ export default function Landing() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                             <p style={{ margin: 0, fontSize: '0.7rem', color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: 800 }}>Lead Developer</p>
                             <span style={{ display: 'inline-block', width: '4px', height: '4px', borderRadius: '50%', background: '#64748b' }}></span>
-                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>43rd Civil</p>
+                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>43rd Civil Engineering</p>
                         </div>
                         <h4 style={{ margin: '0 0 4px 0', fontSize: '1.25rem', color: '#f8fafc', fontWeight: 800, letterSpacing: '-0.3px' }}>Priyankar Padhy</h4>
                         <p style={{ margin: 0, fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -347,7 +345,7 @@ export default function Landing() {
                         </a>
                     </div>
                 </div>
-                */}
+
 
                 <div className="footer-bottom">
                     <p>© 2026 Marketplace Inc. Constructed with ❤️</p>

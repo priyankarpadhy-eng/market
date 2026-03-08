@@ -17,6 +17,8 @@ export default function Profile() {
         location: '',
         classYear: '',
         avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
+        gender: '',
+        phoneNumber: '',
         postsCount: 0,
         commentsCount: 0
     });
@@ -29,6 +31,8 @@ export default function Profile() {
         major: '',
         bio: '',
         location: '',
+        gender: '',
+        phoneNumber: '',
     });
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const [profileError, setProfileError] = useState('');
@@ -74,6 +78,8 @@ export default function Profile() {
                     location: firestoreProfile?.location || '',
                     classYear: firestoreProfile?.classYear || '',
                     avatar: firestoreProfile?.avatar || firestoreProfile?.photoURL || currentUser?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
+                    gender: firestoreProfile?.gender || '',
+                    phoneNumber: firestoreProfile?.phoneNumber || '',
                     postsCount: firestoreProfile?.postsCount || 0,
                     commentsCount: firestoreProfile?.commentsCount || 0
                 };
@@ -84,6 +90,8 @@ export default function Profile() {
                     major: safeProfile.major,
                     bio: safeProfile.bio,
                     location: safeProfile.location,
+                    gender: safeProfile.gender,
+                    phoneNumber: safeProfile.phoneNumber,
                 });
 
             } catch (err) {
@@ -100,6 +108,8 @@ export default function Profile() {
             major: editForm.major,
             bio: editForm.bio,
             location: editForm.location,
+            gender: editForm.gender,
+            phoneNumber: editForm.phoneNumber,
         };
         setProfile(prev => ({ ...prev, ...updatedProfile }));
         setShowEditModal(false);
@@ -223,7 +233,6 @@ export default function Profile() {
                             exit={{ opacity: 0 }}
                             className="profile-modal-overlay"
                             style={{ zIndex: 100000 }}
-                            onClick={() => setShowAdminModal(false)}
                         >
                             <motion.div
                                 key="admin-modal-content"
@@ -268,7 +277,6 @@ export default function Profile() {
                             exit={{ opacity: 0 }}
                             className="profile-modal-overlay"
                             style={{ zIndex: 100000 }}
-                            onClick={() => setShowEditModal(false)}
                         >
                             <motion.div
                                 key="edit-profile-content"
@@ -306,6 +314,32 @@ export default function Profile() {
                                 <div className="profile-modal-field">
                                     <label htmlFor="edit-bio">Bio</label>
                                     <textarea id="edit-bio" value={editForm.bio} onChange={(e) => setEditForm(prev => ({ ...prev, bio: e.target.value }))} />
+                                </div>
+                                <div className="profile-modal-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                    <div className="profile-modal-field">
+                                        <label htmlFor="edit-gender">Gender (Required for Rides)</label>
+                                        <select
+                                            id="edit-gender"
+                                            value={editForm.gender}
+                                            onChange={(e) => setEditForm(prev => ({ ...prev, gender: e.target.value }))}
+                                            style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-medium)', background: 'var(--bg-white)', color: 'var(--text-primary)' }}
+                                        >
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div className="profile-modal-field">
+                                        <label htmlFor="edit-phone">Phone Number</label>
+                                        <input
+                                            type="tel"
+                                            id="edit-phone"
+                                            placeholder="+91..."
+                                            value={editForm.phoneNumber}
+                                            onChange={(e) => setEditForm(prev => ({ ...prev, phoneNumber: e.target.value }))}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="profile-modal-actions">
                                     <button className="profile-modal-cancel" onClick={() => setShowEditModal(false)}>Cancel</button>

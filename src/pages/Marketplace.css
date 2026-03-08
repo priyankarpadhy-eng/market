@@ -226,13 +226,28 @@
         display: none;
     }
 
-    .marketplace-list-btn::after {
-        content: '+';
+    .marketplace-list-btn svg {
+        display: block;
         font-size: 1.8rem;
     }
 
-    .marketplace-list-btn svg {
-        display: none;
+    /* Floating Action Button (FAB) Pulse */
+    @keyframes fab-pulse {
+        0% {
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        50% {
+            box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+        }
+
+        100% {
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+    }
+
+    .marketplace-list-btn {
+        animation: fab-pulse 2s infinite;
     }
 
     .marketplace-categories {

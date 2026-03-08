@@ -1,0 +1,374 @@
+.ride-card {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.ride-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+}
+
+.ride-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to right, var(--theme-color), #fff);
+}
+
+/* Themes */
+.theme-indigo {
+    --theme-color: #6366f1;
+    --theme-bg: #e0e7ff;
+}
+
+.theme-pink {
+    --theme-color: #ec4899;
+    --theme-bg: #fce7f3;
+}
+
+.theme-blue {
+    --theme-color: #3b82f6;
+    --theme-bg: #dbeafe;
+}
+
+.ride-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.share-ride-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #f1f5f9;
+    background: #f8fafc;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.share-ride-btn:hover {
+    background: var(--theme-color);
+    color: white;
+    border-color: var(--theme-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge {
+    background: var(--theme-bg);
+    color: var(--theme-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ride-time {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Route */
+.ride-route {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+.route-stop {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon {
+    font-size: 1.4rem;
+    color: #cbd5e1;
+}
+
+.icon.from {
+    color: #22c55e;
+}
+
+.icon.to {
+    color: #f43f5e;
+}
+
+.stop-info label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #94a3b8;
+    margin-bottom: 2px;
+}
+
+.stop-info p {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0;
+}
+
+.route-arrow {
+    color: #cbd5e1;
+}
+
+/* Seating Chart */
+.ride-seats-visual {
+    margin-bottom: 24px;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #94a3b8;
+    margin-bottom: 12px;
+    letter-spacing: 1.5px;
+}
+
+.seats-grid {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.seat-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.seat-icon.empty {
+    border: 2px dashed #e2e8f0;
+    color: #cbd5e1;
+}
+
+.seat-icon.occupied {
+    background: var(--theme-bg);
+    border: 1px solid var(--theme-color);
+}
+
+.seat-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.seats-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+/* Footer & Actions */
+.ride-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.organizer-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.organizer-info img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.org-label {
+    display: block;
+    font-size: 0.6rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+.org-name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+
+.ride-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.ride-btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ride-btn.join {
+    background: var(--theme-color);
+    color: white;
+}
+
+.ride-btn.join:hover {
+    background: #1e293b;
+    transform: scale(1.05);
+}
+
+.ride-btn.leave {
+    background: #fff1f2;
+    color: #f43f5e;
+}
+
+.ride-btn.leave:hover {
+    background: #f43f5e;
+    color: white;
+}
+
+.ride-btn.cancel {
+    background: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+}
+
+.ride-btn.cancel:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.ride-btn.chat {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+
+.ride-btn.full {
+    background: #f1f5f9;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.participant-badge {
+    position: absolute;
+    top: 50px;
+    right: 24px;
+    background: #dcfce7;
+    color: #22c55e;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 10px rgba(34, 197, 94, 0.1);
+}
+
+@media (max-width: 600px) {
+    .ride-card {
+        padding: 20px 16px;
+    }
+
+    .ride-header {
+        margin-bottom: 20px;
+    }
+
+    .ride-route {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .route-arrow {
+        transform: rotate(90deg);
+        margin: -4px 0 -4px 4px;
+        opacity: 0.5;
+    }
+
+    .stop-info p {
+        font-size: 1rem;
+    }
+
+    .ride-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .ride-actions {
+        width: 100%;
+    }
+
+    .actions-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .ride-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 8px;
+        font-size: 0.8rem;
+    }
+
+    .participant-badge {
+        top: 40px;
+        right: 16px;
+        font-size: 0.65rem;
+    }
+}

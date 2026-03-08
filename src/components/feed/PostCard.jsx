@@ -13,6 +13,7 @@ export default function PostCard({ post, index = 0 }) {
     const navigate = useNavigate();
     const { isAdmin, currentUser } = useAuth();
     const [showReportModal, setShowReportModal] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     // Parallax logic
     const x = useMotionValue(300);
@@ -176,7 +177,24 @@ export default function PostCard({ post, index = 0 }) {
                         <div className="poetic-3d-main">
                             <div className="poetic-glass-panel">
                                 <div className="poetic-3d-quotes">“</div>
-                                <p className="poetic-3d-text">{post.content}</p>
+                                <div className="poetic-text-container">
+                                    <p className={`poetic-3d-text ${isExpanded ? 'expanded' : ''}`}>
+                                        {!isExpanded && post.content.length > 200
+                                            ? `${post.content.slice(0, 200)}...`
+                                            : post.content}
+                                    </p>
+                                    {post.content.length > 200 && (
+                                        <button
+                                            className="poetic-view-more"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsExpanded(!isExpanded);
+                                            }}
+                                        >
+                                            {isExpanded ? 'Show Less' : 'View More'}
+                                        </button>
+                                    )}
+                                </div>
                                 <div className="poetic-3d-quotes bottom">”</div>
                             </div>
 
@@ -488,16 +506,22 @@ export default function PostCard({ post, index = 0 }) {
 
             {
                 post.video && (
-                    <div className="post-media-container">
-                        <video src={post.video} controls className="post-media-image" style={{ width: '100%', maxHeight: '500px', objectFit: 'cover', display: 'block' }} />
+                    <div className="post-media-container premium-media-container">
+                        <div className="media-blur-bg">
+                            <video src={post.video} autoPlay muted loop playsInline />
+                        </div>
+                        <video src={post.video} controls className="post-media-main" />
                     </div>
                 )
             }
 
             {
                 post.image && (
-                    <div className="post-media-container">
-                        <img src={post.image} alt="post media" className="post-media-image" loading="lazy" />
+                    <div className="post-media-container premium-media-container">
+                        <div className="media-blur-bg">
+                            <img src={post.image} alt="" loading="lazy" />
+                        </div>
+                        <img src={post.image} alt="post media" className="post-media-main" loading="lazy" />
                     </div>
                 )
             }

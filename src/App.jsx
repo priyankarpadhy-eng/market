@@ -19,6 +19,7 @@ import Terms from './pages/Terms';
 import Support from './pages/Support';
 import Music from './pages/Music';
 import Events from './pages/Events';
+import Rides from './pages/Rides';
 import { useAuth } from './contexts/AuthContext';
 import EmailVerificationModal from './components/auth/EmailVerificationModal';
 
@@ -43,6 +44,7 @@ function AppRoutes() {
       {/* Protected routes inside Layout */}
       <Route element={(currentUser && !currentUser.isAnonymous) ? <Layout /> : <Navigate to="/" />}>
         <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/rides" element={<Rides />} />
         <Route path="/events" element={<Events />} />
         <Route path="/music" element={<Music />} />
         <Route path="/feature-requests" element={<FeatureRequests />} />

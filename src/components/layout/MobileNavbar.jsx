@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FiHome, FiShoppingBag, FiCalendar, FiMusic, FiUser, FiZap } from 'react-icons/fi';
+import { FiHome, FiShoppingBag, FiCalendar, FiUsers, FiUser, FiZap } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import './MobileNavbar.css';
 
@@ -12,7 +12,7 @@ export default function MobileNavbar() {
         { to: '/', icon: FiHome, label: 'Home' },
         { to: '/marketplace', icon: FiShoppingBag, label: 'Market' },
         { to: '/events', icon: FiCalendar, label: 'Events' },
-        { to: '/music', icon: FiMusic, label: 'Music' },
+        { to: '/rides', icon: FiUsers, label: 'Rides' },
         { to: '/profile', icon: FiUser, label: 'Profile' }
     ];
 

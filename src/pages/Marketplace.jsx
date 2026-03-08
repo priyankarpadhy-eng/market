@@ -104,7 +104,7 @@ export default function Marketplace() {
                 </div>
                 <button className="marketplace-list-btn" id="list-item-btn" onClick={() => setShowListModal(true)}>
                     <FiPlus />
-                    List an Item
+                    <span>List an Item</span>
                 </button>
             </div>
 

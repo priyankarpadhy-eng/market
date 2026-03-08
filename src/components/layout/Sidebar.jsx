@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiHome, FiCompass, FiShoppingBag, FiMessageCircle, FiUsers, FiUser, FiSettings, FiLogOut, FiShield, FiCode, FiHeart, FiMusic, FiAward, FiCalendar } from 'react-icons/fi';
+import { FiHome, FiCompass, FiShoppingBag, FiMessageCircle, FiUsers, FiUser, FiSettings, FiLogOut, FiShield, FiCode, FiHeart, FiMusic, FiAward, FiCalendar, FiMap } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import MusicPlayer from '../music/MusicPlayer';
 
@@ -29,6 +29,7 @@ export default function Sidebar() {
     if (!currentUser?.isAnonymous) {
         navLinks.push(
             { to: '/events', icon: FiCalendar, label: 'Events Hub' },
+            { to: '/rides', icon: FiMap, label: 'Ride Share' },
             { to: '/feature-requests', icon: FiCode, label: 'Feature Requests' },
             { to: '/marketplace', icon: FiShoppingBag, label: 'Marketplace' },
             { to: '/messages', icon: FiMessageCircle, label: 'Messages' },
