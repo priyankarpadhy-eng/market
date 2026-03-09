@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { subscribeToRides, createRide } from '../firebase/services';
+import { subscribeToRides } from '../firebase/services';
 import RideCard from '../components/rides/RideCard';
 import CreateRideModal from '../components/rides/CreateRideModal';
 import { FiPlus, FiFilter, FiSearch, FiMap } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import './Rides.css';
 
 export default function Rides() {
     const { currentUser } = useAuth();
+    const [searchParams] = useSearchParams();
+    const highlightId = searchParams.get('id');
     const [rides, setRides] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -19,9 +22,19 @@ export default function Rides() {
         const unsubscribe = subscribeToRides((data) => {
             setRides(data);
             setLoading(false);
+
+            // If we have a highlightId, scroll to it after a short delay
+            if (highlightId) {
+                setTimeout(() => {
+                    const el = document.getElementById(`ride-${highlightId}`);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 800);
+            }
         });
         return unsubscribe;
-    }, []);
+    }, [highlightId]);
 
     const filteredRides = rides.filter(ride => {
         const matchesSearch =
@@ -90,7 +103,12 @@ export default function Rides() {
                 <div className="rides-grid">
                     <AnimatePresence>
                         {filteredRides.map((ride, index) => (
-                            <RideCard key={ride.id} ride={ride} index={index} />
+                            <RideCard
+                                key={ride.id}
+                                ride={ride}
+                                index={index}
+                                highlighted={ride.id === highlightId}
+                            />
                         ))}
                     </AnimatePresence>
                 </div>

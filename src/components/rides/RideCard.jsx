@@ -7,7 +7,7 @@ import JoinRideModal from './JoinRideModal';
 import RideChat from './RideChat';
 import './RideCard.css';
 
-export default function RideCard({ ride, index = 0 }) {
+export default function RideCard({ ride, index = 0, highlighted = false }) {
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [showChat, setShowChat] = useState(false);
@@ -33,14 +33,15 @@ export default function RideCard({ ride, index = 0 }) {
 
     const handleShare = async () => {
         const availableSeats = totalSeats - seatsTaken;
-        const shareText = `*Marketplace*\n\nFrom: ${ride.from}\nTo: ${ride.to}\n\n${dateStr} and ${departureStr}\n\nAvailable seats: ${availableSeats}\nRide creator: ${ride.organizerName}\nContact number: ${ride.organizerPhone || 'Not available'}\n\nRide link:\nhttps://igitmarketplace.shop/rides`;
+        const shareUrl = `https://igitmarketplace.shop/rides?id=${ride.id}`;
+        const shareText = `*Marketplace*\n\nFrom: ${ride.from}\nTo: ${ride.to}\n\n${dateStr} and ${departureStr}\n\nAvailable seats: ${availableSeats}\nRide creator: ${ride.organizerName}\nContact number: ${ride.organizerPhone || 'Not available'}\n\nRide link:\n${shareUrl}`;
 
         if (navigator.share) {
             try {
                 await navigator.share({
                     title: `Ride to ${ride.to}`,
                     text: shareText,
-                    url: 'https://igitmarketplace.shop/rides'
+                    url: shareUrl
                 });
             } catch (err) {
                 console.log('Share error:', err);
@@ -84,7 +85,8 @@ export default function RideCard({ ride, index = 0 }) {
 
     return (
         <motion.article
-            className={`ride-card ${getThemeClass(ride.genderPreference)}`}
+            id={`ride-${ride.id}`}
+            className={`ride-card ${getThemeClass(ride.genderPreference)} ${highlighted ? 'highlighted' : ''}`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
