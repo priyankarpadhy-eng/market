@@ -33,7 +33,7 @@ export default function RideCard({ ride, index = 0 }) {
 
     const handleShare = async () => {
         const availableSeats = totalSeats - seatsTaken;
-        const shareText = `🚀 *CarPooling Alert: IGIT Marketplace*\n\n📍 *From:* ${ride.from}\n🎯 *To:* ${ride.to}\n⏰ *Time:* ${departureStr}\n📅 *Date:* ${dateStr}\n👥 *Available Seats:* ${availableSeats}\n🚻 *Preference:* ${ride.genderPreference || 'Mixed'}\n👤 *Organizer:* ${ride.organizerName}\n\nJoin the ride here:\nhttps://igitmarketplace.shop/rides`;
+        const shareText = `*Marketplace*\n\nFrom: ${ride.from}\nTo: ${ride.to}\n\n${dateStr} and ${departureStr}\n\nAvailable seats: ${availableSeats}\nRide creator: ${ride.organizerName}\nContact number: ${ride.organizerPhone || 'Not available'}\n\nRide link:\nhttps://igitmarketplace.shop/rides`;
 
         if (navigator.share) {
             try {

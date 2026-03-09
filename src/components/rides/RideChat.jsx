@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { subscribeToRideMessages, sendRideMessage, subscribeToParticipants } from '../../firebase/services';
-import { FiSend, FiX, FiInfo, FiUsers, FiPhone, FiStar } from 'react-icons/fi';
+import { FiSend, FiX, FiInfo, FiUsers, FiPhone, FiStar, FiMessageSquare } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import './RideChat.css';
 
@@ -119,14 +119,23 @@ export default function RideChat({ ride, onClose }) {
                 </div>
 
                 <div className="chat-messages" ref={scrollRef}>
+                    {messages.length === 0 && (
+                        <div className="empty-chat-state">
+                            <FiMessageSquare />
+                            <p>No messages yet. Say hello!</p>
+                        </div>
+                    )}
                     {messages.map((m, i) => {
                         const isMine = m.senderId === currentUser.uid;
+                        const msgTime = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '...';
+
                         return (
                             <div key={m.id || i} className={`chat-bubble-wrap ${isMine ? 'mine' : 'theirs'}`}>
                                 {!isMine && <img src={m.senderAvatar} alt="" className="sender-avatar" />}
                                 <div className="chat-bubble">
                                     {!isMine && <span className="sender-name">{m.senderName}</span>}
                                     <p>{m.text}</p>
+                                    <span className="msg-time">{msgTime}</span>
                                 </div>
                             </div>
                         );

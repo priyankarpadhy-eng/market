@@ -752,7 +752,8 @@ export function subscribeToRides(callback) {
             })
             .filter(r => {
                 if (!r.departureTime) return true;
-                return (now.getTime() - r.departureTime.getTime()) < (2 * 60 * 60 * 1000);
+                // Only show upcoming rides (hide once departure time has passed)
+                return r.departureTime.getTime() > now.getTime();
             });
         callback(rides);
     });
