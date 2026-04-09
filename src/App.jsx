@@ -40,6 +40,8 @@ function AppRoutes() {
       <Route path="/terms" element={<Terms />} />
       <Route path="/support" element={<Support />} />
       <Route path="/post/:postId" element={<Layout><PostDetail /></Layout>} />
+      <Route path="/ride/:id" element={<Layout><Rides /></Layout>} />
+
 
       {/* Protected routes inside Layout */}
       <Route element={(currentUser && !currentUser.isAnonymous) ? <Layout /> : <Navigate to="/" />}>

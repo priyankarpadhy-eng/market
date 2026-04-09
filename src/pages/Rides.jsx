@@ -5,18 +5,33 @@ import RideCard from '../components/rides/RideCard';
 import CreateRideModal from '../components/rides/CreateRideModal';
 import { FiPlus, FiFilter, FiSearch, FiMap } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
+
 import './Rides.css';
 
 export default function Rides() {
     const { currentUser } = useAuth();
     const [searchParams] = useSearchParams();
-    const highlightId = searchParams.get('id');
+    const { id: routeId } = useParams();
+    const highlightId = routeId || searchParams.get('id');
+
     const [rides, setRides] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterGender, setFilterGender] = useState('All');
+
+    // Redirect mobile users to Play Store for better App experience
+    useEffect(() => {
+        if (typeof window !== "undefined" && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+            // Redirect to Play Store after a short delay
+            const timer = setTimeout(() => {
+                window.location.href = "https://play.google.com/store/apps/details?id=com.market.app.market_app";
+            }, 1500);
+            return () => clearTimeout(timer);
+        }
+    }, []);
+
 
     useEffect(() => {
         const unsubscribe = subscribeToRides((data) => {
