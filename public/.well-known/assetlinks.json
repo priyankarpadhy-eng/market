@@ -6,10 +6,9 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.market.app.market_app",
+      "package_name": "com.igitmarketplace.app",
       "sha256_cert_fingerprints": [
-        "01:1D:27:25:7A:27:40:FC:2F:D7:A7:C2:C9:71:8D:ED:3C:12:4B:5C:75:BD:14:EE:C6:58:D2:96:3E:48",
-        "01:1D:27:25:7A:27:40:FC:2F:D7:A7:C2:C9:71:8D:ED:3C:12:4B:5C:75:BD:14:EE:C6:58:D2:96:3E:48:AF:23"
+        "01:1D:27:25:7A:27:40:FC:2F:D7:A7:C2:C9:71:8D:ED:3C:12:4B:5C:75:BD:14:EE:C6:58:D2:96:3E:48"
       ]
     }
   }

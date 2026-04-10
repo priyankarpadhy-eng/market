@@ -26,7 +26,7 @@ export default function Rides() {
         if (typeof window !== "undefined" && /Android|iPhone|iPad/i.test(navigator.userAgent)) {
             // Redirect to Play Store after a short delay
             const timer = setTimeout(() => {
-                window.location.href = "https://play.google.com/store/apps/details?id=com.market.app.market_app";
+                window.location.href = "https://play.google.com/store/apps/details?id=com.igitmarketplace.app";
             }, 1500);
             return () => clearTimeout(timer);
         }
