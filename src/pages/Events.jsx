@@ -4,6 +4,7 @@ import { subscribeToEvents } from '../firebase/services';
 import { FiCalendar, FiMapPin, FiClock, FiExternalLink, FiTag, FiSearch, FiPlus, FiStar } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import Lottie from 'lottie-react';
 import './Events.css';
 
 const CATEGORY_COLORS = {
@@ -23,6 +24,14 @@ export default function Events() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('All');
+    const [loadingAnimation, setLoadingAnimation] = useState(null);
+
+    useEffect(() => {
+        fetch('/loading.json')
+            .then(res => res.json())
+            .then(data => setLoadingAnimation(data))
+            .catch(() => setLoadingAnimation(null));
+    }, []);
 
     useEffect(() => {
         const unsub = subscribeToEvents((data) => {
@@ -84,7 +93,18 @@ export default function Events() {
 
             <div className="events-full-grid">
                 {loading ? (
-                    <div className="events-loading">Fetching campus events...</div>
+                    <div className="events-loading-lottie">
+                        {loadingAnimation ? (
+                            <Lottie
+                                animationData={loadingAnimation}
+                                loop={true}
+                                style={{ width: 220, height: 220 }}
+                            />
+                        ) : (
+                            <div className="events-loading">Fetching campus events...</div>
+                        )}
+                        <p className="events-loading-text">Fetching campus events...</p>
+                    </div>
                 ) : filteredEvents.length === 0 ? (
                     <div className="events-empty">
                         <FiCalendar size={48} />

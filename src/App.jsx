@@ -44,7 +44,7 @@ function AppRoutes() {
 
 
       {/* Protected routes inside Layout */}
-      <Route element={(currentUser && !currentUser.isAnonymous) ? <Layout /> : <Navigate to="/" />}>
+      <Route element={currentUser ? <Layout /> : <Navigate to="/" />}>
         <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/rides" element={<Rides />} />
         <Route path="/events" element={<Events />} />

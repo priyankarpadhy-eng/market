@@ -177,25 +177,69 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            setAuthUser(user);
             if (user) {
+                setAuthUser(user);
                 // Fetch Firestore profile
-                const profile = await fetchUserProfile(user.uid);
+                let profile = await fetchUserProfile(user.uid);
+                
+                if (!profile) {
+                    // Auto-create a guest profile for the anonymous user
+                    const name = `Guest_${Math.floor(Math.random() * 9000) + 1000}`;
+                    const guestData = {
+                        uid: user.uid,
+                        displayName: name,
+                        email: user.email || '',
+                        photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
+                        role: 'founder', // Give admin/founder permissions to mock user
+                        university: 'IGIT Sarang',
+                        createdAt: serverTimestamp(),
+                    };
+                    try {
+                        await setDoc(doc(db, 'users', user.uid), guestData);
+                        profile = guestData;
+                    } catch (e) {
+                        console.error('Failed to save guest profile to Firestore:', e);
+                    }
+                } else if (profile.role === 'user' || profile.role === 'student') {
+                    // Auto-upgrade to founder role
+                    try {
+                        await setDoc(doc(db, 'users', user.uid), { role: 'founder' }, { merge: true });
+                        profile.role = 'founder';
+                    } catch (e) {
+                        console.error('Failed to upgrade role to founder:', e);
+                    }
+                }
 
-                // Merge profile data with relevant auth metadata
+                // Merge profile data with relevant auth metadata, mocking isAnonymous as false
                 setCurrentUser({
                     ...(profile || {}),
                     uid: user.uid,
-                    displayName: profile?.displayName || user.displayName || 'User',
-                    email: user.email,
+                    displayName: profile?.displayName || user.displayName || 'Guest User',
+                    email: user.email || '',
                     photoURL: profile?.photoURL || user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
-                    emailVerified: user.emailVerified,
-                    isAnonymous: user.isAnonymous
+                    emailVerified: true,
+                    isAnonymous: false // Mock as false so they get full access
                 });
+                setLoading(false);
             } else {
-                setCurrentUser(null);
+                // Not logged in: sign in anonymously automatically!
+                try {
+                    await signInAnonymously(auth);
+                } catch (err) {
+                    console.error("Auto anonymous sign-in failed:", err);
+                    // Local fallback so it doesn't stay loading forever
+                    setCurrentUser({
+                        uid: 'mock-user-123',
+                        displayName: 'Guest Explorer',
+                        email: 'guest@igitsarang.ac.in',
+                        photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marketplace',
+                        role: 'founder',
+                        isAnonymous: false,
+                        emailVerified: true
+                    });
+                    setLoading(false);
+                }
             }
-            setLoading(false);
         });
 
         return unsubscribe;
