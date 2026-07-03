@@ -4,6 +4,10 @@
     position: relative;
 }
 
+.layout--no-navbar {
+    min-height: 100vh;
+}
+
 .layout::before {
     content: '';
     position: fixed;

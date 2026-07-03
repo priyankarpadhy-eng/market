@@ -28,7 +28,6 @@ export default function Sidebar() {
 
     if (!currentUser?.isAnonymous) {
         navLinks.push(
-            { to: '/events', icon: FiCalendar, label: 'Events Hub' },
             { to: '/rides', icon: FiMap, label: 'Ride Share' },
             { to: '/feature-requests', icon: FiCode, label: 'Feature Requests' },
             { to: '/marketplace', icon: FiShoppingBag, label: 'Marketplace' },

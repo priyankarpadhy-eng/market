@@ -67,17 +67,6 @@ export default function Events() {
 
     return (
         <div className="events-page">
-            <div className="events-header">
-                <div className="events-title-info">
-                    <h1 className="events-title">Events <span className="text-gradient">Hub</span></h1>
-                    <p className="events-subtitle">Join workshops, fests, and campus activities at IGIT Sarang.</p>
-                </div>
-                {(isAdmin || isFounder) && (
-                    <button className="create-event-btn" onClick={() => navigate('/admin')}>
-                        <FiPlus /> Post Event
-                    </button>
-                )}
-            </div>
 
             <div className="events-filters-bar">
                 <div className="events-search">

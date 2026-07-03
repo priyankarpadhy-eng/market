@@ -11,7 +11,6 @@ export default function MobileNavbar() {
     const navItems = [
         { to: '/', icon: FiHome, label: 'Home' },
         { to: '/marketplace', icon: FiShoppingBag, label: 'Market' },
-        { to: '/events', icon: FiCalendar, label: 'Events' },
         { to: '/rides', icon: FiUsers, label: 'Rides' },
         { to: '/profile', icon: FiUser, label: 'Profile' }
     ];
