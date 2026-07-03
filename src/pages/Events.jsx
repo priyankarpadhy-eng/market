@@ -71,16 +71,13 @@ export default function Events() {
             {/* Full-screen loading overlay — covers everything including sidebar */}
             {loading && (
                 <div className="events-fullscreen-loader">
-                    {loadingAnimation ? (
+                    {loadingAnimation && (
                         <Lottie
                             animationData={loadingAnimation}
                             loop={true}
                             style={{ width: 260, height: 260 }}
                         />
-                    ) : (
-                        <div className="events-loading">Fetching campus events...</div>
                     )}
-                    <p className="events-loading-text">Fetching campus events...</p>
                 </div>
             )}
 
