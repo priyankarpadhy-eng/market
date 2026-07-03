@@ -68,6 +68,25 @@ export default function Events() {
     return (
         <div className="events-page">
 
+            {/* Full-screen loading overlay — covers everything including sidebar */}
+            {loading && (
+                <div className="events-fullscreen-loader">
+                    {loadingAnimation ? (
+                        <Lottie
+                            animationData={loadingAnimation}
+                            loop={true}
+                            style={{ width: 260, height: 260 }}
+                        />
+                    ) : (
+                        <div className="events-loading">Fetching campus events...</div>
+                    )}
+                    <p className="events-loading-text">Fetching campus events...</p>
+                </div>
+            )}
+
+            {/* Page content hidden while loading */}
+            <div style={{ visibility: loading ? 'hidden' : 'visible' }}>
+
             <div className="events-filters-bar">
                 <div className="events-search">
                     <FiSearch className="search-icon" />
@@ -92,20 +111,7 @@ export default function Events() {
             </div>
 
             <div className="events-full-grid">
-                {loading ? (
-                    <div className="events-loading-lottie">
-                        {loadingAnimation ? (
-                            <Lottie
-                                animationData={loadingAnimation}
-                                loop={true}
-                                style={{ width: 220, height: 220 }}
-                            />
-                        ) : (
-                            <div className="events-loading">Fetching campus events...</div>
-                        )}
-                        <p className="events-loading-text">Fetching campus events...</p>
-                    </div>
-                ) : filteredEvents.length === 0 ? (
+                {filteredEvents.length === 0 ? (
                     <div className="events-empty">
                         <FiCalendar size={48} />
                         <p>No events found matching your criteria.</p>
@@ -161,6 +167,7 @@ export default function Events() {
                     </AnimatePresence>
                 )}
             </div>
+            </div>{/* end visibility wrapper */}
         </div>
     );
 }
