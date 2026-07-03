@@ -34,10 +34,21 @@ export default function Events() {
     }, []);
 
     useEffect(() => {
+        // Mandatory 5-second minimum loading time
+        const minLoadPromise = new Promise(resolve => setTimeout(resolve, 5000));
+        let resolveData;
+        const dataPromise = new Promise(resolve => { resolveData = resolve; });
+
         const unsub = subscribeToEvents((data) => {
             setEvents(data || []);
+            resolveData();
+        });
+
+        // Only hide the loader after BOTH the data is ready AND 5 seconds have passed
+        Promise.all([minLoadPromise, dataPromise]).then(() => {
             setLoading(false);
         });
+
         return () => unsub();
     }, []);
 
